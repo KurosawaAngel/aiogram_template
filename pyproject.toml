@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "bot"
+version = "1.0.0"
+description = "basic aiogram template"
+authors = ["KuroAngel"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "^3.3.0"
+sqlalchemy = "^2.0.25"
+asyncpg = "^0.29.0"
+alembic = "^1.13.1"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

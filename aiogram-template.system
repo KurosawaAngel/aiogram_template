@@ -1,0 +1,16 @@
+[Unit]
+Description=descp
+After=syslog.target network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=User
+WorkingDirectory=/home/user/dir
+ExecStart=/path/to/.venv/python3 -m bot
+KillMode=process
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -25,4 +25,4 @@ venv/
 docker-compose.yml
 .env
 
-.tests
+# .tests

@@ -11,6 +11,8 @@ aiogram = "^3.3.0"
 sqlalchemy = "^2.0.25"
 asyncpg = "^0.29.0"
 alembic = "^1.13.1"
+pydantic-settings = "^2.1.0"
+msgspec = "^0.18.6"
 
 
 [tool.poetry.group.dev.dependencies]

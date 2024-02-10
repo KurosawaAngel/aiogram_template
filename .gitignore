@@ -22,7 +22,6 @@ venv/
 .venv/
 .hatch/
 
-docker-compose.yml
 .env
 
 # .tests

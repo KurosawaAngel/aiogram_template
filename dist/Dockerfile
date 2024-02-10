@@ -1,14 +1,14 @@
 FROM python:3.11-slim
 WORKDIR /app
 
-COPY translations translations/
+COPY alembic.ini .
 
 COPY migrations migrations/
 
-COPY alembic.ini .
+COPY translations translations/
 
-COPY bot-1.0.0.tar.gz /package/bot-1.0.0.tar.gz
+COPY bot-1.0.0.tar.gz package/bot-1.0.0.tar.gz
 
-RUN pip install /package/bot-1.0.0.tar.gz --no-cache-dir
+RUN pip install package/bot-1.0.0.tar.gz --no-cache-dir
 
 CMD ["python", "-m", "bot"]

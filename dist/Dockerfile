@@ -9,6 +9,6 @@ COPY alembic.ini .
 
 COPY bot-1.0.0.tar.gz /package/bot-1.0.0.tar.gz
 
-RUN pip install /package/bot-1.0.0.tar.gz
+RUN pip install /package/bot-1.0.0.tar.gz --no-cache-dir
 
 CMD ["python", "-m", "bot"]

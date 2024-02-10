@@ -30,7 +30,9 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   bot:
-    build: .
+    build:
+      context: .
+      dockerfile: /dist/Dockerfile
     restart: unless-stopped
     env_file: .env
 

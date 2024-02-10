@@ -26,5 +26,10 @@ build-backend = "poetry.core.masonry.api"
 flow = [
     { work_dir = "/app" },
 ]
+copy = [
+    { source = "translations", target = "translations/" },
+    { source = "migrations", target = "migrations/" },
+    { source = "alembic.ini", target = "." },
+]
 from = "python:3.11-slim"
 cmd = ["python", "-m", "bot"]

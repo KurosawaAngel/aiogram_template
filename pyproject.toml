@@ -21,3 +21,10 @@ mypy = "^1.8.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.docker]
+flow = [
+    { work_dir = "/app" },
+]
+from = "python:3.11-slim"
+cmd = ["python", "-m", "bot"]

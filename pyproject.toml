@@ -32,4 +32,4 @@ copy = [
     { source = "alembic.ini", target = "." },
 ]
 from = "python:3.11-slim"
-cmd = ["python", "-m", "bot"]
+cmd = ["python", "-O", "-m", "bot"]

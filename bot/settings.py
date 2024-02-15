@@ -10,7 +10,6 @@ class Settings(BaseSettings):
     token: SecretStr
     admin_chat_id: int
     use_webhook: bool
-    use_redis: bool
     drop_pending_updates: bool
 
     postgres_host: str
@@ -30,7 +29,9 @@ class Settings(BaseSettings):
     redis_port: int
     redis_database: int
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+    )
 
     @property
     def postgres_url(self):

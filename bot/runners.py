@@ -5,19 +5,20 @@ from aiohttp import web
 from .settings import Settings
 
 
-async def startup(bot: Bot, settings: Settings):
+async def startup(bot: Bot, settings: Settings) -> None:
     if settings.use_webhook:
-        return await bot.set_webhook(
+        await bot.set_webhook(
             settings.webhook_url, drop_pending_updates=settings.drop_pending_updates
         )
+        return
     await bot.delete_webhook(drop_pending_updates=settings.drop_pending_updates)
 
 
-async def shutdown(bot: Bot, settings: Settings):
+async def shutdown(bot: Bot, settings: Settings) -> None:
     await bot.delete_webhook()
 
 
-def run_webhook(dp: Dispatcher, settings: Settings, bot: Bot):
+def run_webhook(dp: Dispatcher, settings: Settings, bot: Bot) -> None:
     if settings.reset_webhook:
         dp.shutdown.register(shutdown)
     app = web.Application()

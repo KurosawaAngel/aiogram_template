@@ -27,9 +27,7 @@ flow = [
     { work_dir = "/app" },
 ]
 copy = [
-    { source = "translations", target = "translations/" },
-    { source = "migrations", target = "migrations/" },
-    { source = "alembic.ini", target = "." },
+    { source = ".", target = "." },
 ]
 from = "python:3.11-slim"
-cmd = ["python", "-O", "-m", "bot"]
+entrypoint = ["scripts/docker-entrypoint.sh"]

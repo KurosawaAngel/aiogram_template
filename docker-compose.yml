@@ -32,7 +32,7 @@ services:
   bot:
     build:
       context: .
-      dockerfile: /dist/Dockerfile
+      dockerfile: dist/Dockerfile
     restart: always
     env_file: .env
 

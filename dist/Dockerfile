@@ -1,16 +1,10 @@
 FROM python:3.11-slim
 WORKDIR /app
 
-COPY scripts scripts/
+COPY . .
 
-COPY alembic.ini .
+RUN chmod +x scripts/docker-entrypoint.sh
 
-COPY migrations migrations/
-
-COPY translations translations/
-
-COPY bot-1.0.0.tar.gz package/bot-1.0.0.tar.gz
-
-RUN pip install package/bot-1.0.0.tar.gz --no-cache-dir
+RUN pip install dist/bot-1.0.0.tar.gz --no-cache-dir
 
 ENTRYPOINT ["scripts/docker-entrypoint.sh"]

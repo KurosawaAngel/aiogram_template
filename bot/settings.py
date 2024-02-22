@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     )
 
     @property
-    def postgres_url(self):
+    def postgres_url(self) -> str:
         """URL for DataBase"""
         return (
             "postgresql+asyncpg://"
@@ -43,5 +43,9 @@ class Settings(BaseSettings):
         )
 
     @property
-    def webhook_url(self):
+    def webhook_url(self) -> str:
         return f"{self.webhook_base}{self.webhook_path}"
+
+    @property
+    def redis_url(self) -> str:
+        return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_database}"

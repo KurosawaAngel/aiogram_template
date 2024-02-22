@@ -11,7 +11,7 @@ def setup_dispatcher(settings: Settings) -> Dispatcher:
     :return: Configured ``Dispatcher`` with installed middlewares and included routers
     """
     storage = RedisStorage.from_url(
-        url=settings.redis_host,
+        url=settings.redis_url,
         json_loads=mjson.decode,
         json_dumps=mjson.encode,
         key_builder=DefaultKeyBuilder(with_destiny=True),

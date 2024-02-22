@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     webhook_base: str
     webhook_path: str
     webhook_port: int
-    secret: str = Field(default_factory=secrets.token_urlsafe())
+    secret: str = Field(default_factory=secrets.token_urlsafe)
     reset_webhook: bool
 
     redis_host: str

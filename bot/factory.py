@@ -16,7 +16,11 @@ def setup_dispatcher(settings: Settings) -> Dispatcher:
         json_dumps=mjson.encode,
         key_builder=DefaultKeyBuilder(with_destiny=True),
     )
-    dp = Dispatcher(storage=storage, events_isolation=storage.create_isolation())
+    dp = Dispatcher(
+        storage=storage,
+        events_isolation=storage.create_isolation(),
+        settiongs=settings,
+    )
     dp.startup.register(startup)
     dp.shutdown.register(shutdown)
     return dp

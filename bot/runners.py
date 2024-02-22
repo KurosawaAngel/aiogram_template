@@ -15,12 +15,11 @@ async def startup(bot: Bot, settings: Settings) -> None:
 
 
 async def shutdown(bot: Bot, settings: Settings) -> None:
-    await bot.delete_webhook()
+    if settings.reset_webhook:
+        await bot.delete_webhook()
 
 
 def run_webhook(dp: Dispatcher, settings: Settings, bot: Bot) -> None:
-    if settings.reset_webhook:
-        dp.shutdown.register(shutdown)
     app = web.Application()
     SimpleRequestHandler(dp, bot, secret_token=settings.secret).register(
         app, path=settings.webhook_path

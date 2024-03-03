@@ -1,7 +1,7 @@
 from aiogram import Dispatcher
 from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 
-from .runners import shutdown, startup
+from .runners import on_shutdown, on_startup
 from .settings import Settings
 from .utils import msgspec_json as mjson
 
@@ -21,6 +21,6 @@ def setup_dispatcher(settings: Settings) -> Dispatcher:
         events_isolation=storage.create_isolation(),
         settiongs=settings,
     )
-    dp.startup.register(startup)
-    dp.shutdown.register(shutdown)
+    dp.startup.register(on_startup)
+    dp.shutdown.register(on_shutdown)
     return dp

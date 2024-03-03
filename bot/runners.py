@@ -5,7 +5,7 @@ from aiohttp import web
 from .settings import Settings
 
 
-async def startup(bot: Bot, settings: Settings) -> None:
+async def on_startup(bot: Bot, settings: Settings) -> None:
     if settings.use_webhook:
         await bot.set_webhook(
             settings.webhook_url, drop_pending_updates=settings.drop_pending_updates
@@ -14,7 +14,7 @@ async def startup(bot: Bot, settings: Settings) -> None:
     await bot.delete_webhook(drop_pending_updates=settings.drop_pending_updates)
 
 
-async def shutdown(bot: Bot, settings: Settings) -> None:
+async def on_shutdown(bot: Bot, settings: Settings) -> None:
     if settings.reset_webhook:
         await bot.delete_webhook()
 

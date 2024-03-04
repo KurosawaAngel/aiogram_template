@@ -22,5 +22,4 @@ poetry.lock
 pyproject.toml
 
 # Systemd
-
-aiogram-template.system
+*.system

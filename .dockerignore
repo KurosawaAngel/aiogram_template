@@ -1,0 +1,26 @@
+# Project
+.idea/
+.github/
+.*ignore
+Makefile
+README.md
+bot/
+
+# Cache
+__pycache__/
+*.py[cod]
+
+# Environment
+.env*
+
+# Docker
+docker-compose*.yml
+Dockerfile
+
+# Poetry
+poetry.lock
+pyproject.toml
+
+# Systemd
+
+aiogram-template.system

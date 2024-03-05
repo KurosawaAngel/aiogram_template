@@ -4,6 +4,7 @@ version = "1.0.0"
 description = "basic aiogram template"
 authors = ["KuroAngel"]
 readme = "README.md"
+packages = [{include = "bot", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

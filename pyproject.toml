@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "bot"
+name = "aiogram_template"
 version = "1.0.0"
 description = "basic aiogram template"
 authors = ["KuroAngel"]
 readme = "README.md"
-packages = [{include = "bot", from = "src"}]
+packages = [{include = "aiogram_template", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

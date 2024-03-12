@@ -1,15 +1,13 @@
 [Unit]
-Description=descp
-After=syslog.target network.target postgresql.service
+Description=aiogram template
+After=syslog.target network.target postgresql.service redis.service
 Requires=postgresql.service
 
 [Service]
 Type=simple
 WorkingDirectory=/home/user/dir
-ExecStart=poetry run python3 -m bot
-EnvironmentFile=/path/to/file
+ExecStart=poetry run python3 -m aiogram_template
 User=User
-Group=user
 KillMode=process
 Restart=on-failure
 RestartSec=10

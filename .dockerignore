@@ -4,6 +4,7 @@
 .*ignore
 Makefile
 README.md
+aiogram-template.system
 
 # Cache
 __pycache__/

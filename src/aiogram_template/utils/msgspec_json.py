@@ -7,5 +7,5 @@ encode_bytes: Final[Callable[..., bytes]] = Encoder().encode
 
 
 def encode(obj: Any) -> str:
-    data: bytes = encode_bytes(obj)
+    data = encode_bytes(obj)
     return data.decode()

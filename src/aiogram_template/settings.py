@@ -65,7 +65,7 @@ class Config(BaseSettings):
         return self.webhook.webhook_url
 
     @property
-    def postgres_url(self) -> str:
+    def database_url(self) -> str:
         return self.postgres.url
 
     @property

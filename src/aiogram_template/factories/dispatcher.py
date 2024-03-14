@@ -18,7 +18,7 @@ def _setup_middlewares(dp: Dispatcher, config: Config) -> None:
 
     :return: None
     """
-    dp["engine"] = engine = create_engine(config.postgres_url)
+    dp["engine"] = engine = create_engine(config.database_url)
     maker = create_maker(engine)
     dp.update.outer_middleware(DBSessionMiddleware(maker))
     setup_dialogs(dp)

@@ -4,7 +4,6 @@
 .*ignore
 Makefile
 README.md
-systemd/
 
 # Cache
 __pycache__/
@@ -23,3 +22,4 @@ pyproject.toml
 
 # Systemd
 *.system
+systemd/

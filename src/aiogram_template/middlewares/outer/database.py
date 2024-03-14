@@ -2,16 +2,16 @@ from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
-from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from aiogram_template.services.database import Repository
 
+REPOSITORY_NAME = "repository"
+
 
 class DBSessionMiddleware(BaseMiddleware):
-    session_maker: async_sessionmaker[AsyncSession]
-
-    def __init__(self, session_maker: async_sessionmaker[AsyncSession]):
-        self.session_maker = session_maker
+    def __init__(self, maker: async_sessionmaker[AsyncSession]) -> None:
+        self.maker = maker
 
     async def __call__(
         self,
@@ -19,6 +19,6 @@ class DBSessionMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: Dict[str, Any],
     ) -> Any:
-        async with self.session_maker() as session:
-            data["repository"] = Repository(session)
+        async with self.maker() as session:
+            data[REPOSITORY_NAME] = Repository(session)
             return await handler(event, data)

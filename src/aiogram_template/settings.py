@@ -1,4 +1,6 @@
-from pydantic import SecretStr
+from secrets import token_urlsafe
+
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings as _BaseSettings
 from pydantic_settings import SettingsConfigDict
 
@@ -20,7 +22,7 @@ class WebhookConfig(BaseSettings, env_prefix="WEBHOOK_"):
     base: str
     path: str
     port: int
-    secret: str
+    secret: SecretStr = Field(default=token_urlsafe)
     reset: bool
     use: bool
 

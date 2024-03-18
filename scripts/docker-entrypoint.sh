@@ -3,4 +3,4 @@
 set -e
 
 alembic upgrade head
-exec python -O -m bot
+exec python -O -m aiogram_template

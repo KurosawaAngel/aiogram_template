@@ -4,7 +4,7 @@ from aiogram_dialog import setup_dialogs
 
 from aiogram_template.middlewares.outer import DBSessionMiddleware
 from aiogram_template.runners import on_shutdown, on_startup
-from aiogram_template.services.database import create_engine, create_maker
+from aiogram_template.services.database import create_engine, create_session_maker
 from aiogram_template.settings import Config
 from aiogram_template.utils import msgspec_json as mjson
 
@@ -18,9 +18,11 @@ def _setup_middlewares(dp: Dispatcher, config: Config) -> None:
 
     :return: None
     """
+
     dp["engine"] = engine = create_engine(config.database_url)
-    maker = create_maker(engine)
-    dp.update.outer_middleware(DBSessionMiddleware(maker))
+    session_maker = create_session_maker(engine)
+    dp.update.outer_middleware(DBSessionMiddleware(session_maker))
+
     setup_dialogs(dp)
 
 

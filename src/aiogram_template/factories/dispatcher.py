@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from aiogram import Dispatcher
 from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram_dialog import setup_dialogs
@@ -39,6 +41,8 @@ def setup_dispatcher(config: Config) -> Dispatcher:
         json_loads=mjson.decode,
         json_dumps=mjson.encode,
         key_builder=DefaultKeyBuilder(with_destiny=True),
+        state_ttl=timedelta(days=35),
+        data_ttl=timedelta(days=35),
     )
     dp = Dispatcher(
         storage=storage,

@@ -1,13 +1,13 @@
 import logging
 
+from aiogram_template.configs import Config
 from aiogram_template.factories.bot import create_bot
 from aiogram_template.factories.dispatcher import setup_dispatcher
 from aiogram_template.runners import run_webhook
-from aiogram_template.settings import create_config
 
 
 def main() -> None:
-    config = create_config()
+    config = Config.create_config()
     bot = create_bot(config)
     dp = setup_dispatcher(config)
     if config.webhook.use:

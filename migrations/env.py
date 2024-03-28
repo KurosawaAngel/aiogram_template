@@ -1,13 +1,12 @@
 import asyncio
 from logging.config import fileConfig
 
+from aiogram_template.configs import Config
+from aiogram_template.services.database.models import Base
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-
-from aiogram_template.services.database.models import Base
-from aiogram_template.settings import Config
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -31,7 +30,7 @@ target_metadata = Base.metadata
 
 
 def _create_dsn() -> str:
-    settings = Config()
+    settings = Config.create_config()
     return settings.database_url
 
 

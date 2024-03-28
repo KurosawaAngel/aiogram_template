@@ -1,23 +1,24 @@
 from secrets import token_urlsafe
+from typing import Self
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings as _BaseSettings
 from pydantic_settings import SettingsConfigDict
 
 
-class BaseSettings(_BaseSettings):
+class BaseConfig(_BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+        env_file=".env", env_file_encoding="utf-8", extra="ignore", frozen=True
     )
 
 
-class CommonConfig(BaseSettings, env_prefix="COMMON_"):
+class CommonConfig(BaseConfig, env_prefix="COMMON_"):
     token: SecretStr
     admin_chat_id: int
     drop_pending_updates: bool
 
 
-class WebhookConfig(BaseSettings, env_prefix="WEBHOOK_"):
+class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
     host: str
     base: str
     path: str
@@ -27,12 +28,12 @@ class WebhookConfig(BaseSettings, env_prefix="WEBHOOK_"):
     use: bool
 
     @property
-    def webhook_url(self) -> str:
+    def url(self) -> str:
         """URL for Webhook"""
         return f"{self.base}{self.path}"
 
 
-class PostgresConfig(BaseSettings, env_prefix="POSTGRES_"):
+class PostgresConfig(BaseConfig, env_prefix="POSTGRES_"):
     host: str
     db: str
     password: str
@@ -44,7 +45,7 @@ class PostgresConfig(BaseSettings, env_prefix="POSTGRES_"):
         return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
 
 
-class RedisConfig(BaseSettings, env_prefix="REDIS_"):
+class RedisConfig(BaseConfig, env_prefix="REDIS_"):
     host: str
     port: int
     database: int
@@ -54,7 +55,7 @@ class RedisConfig(BaseSettings, env_prefix="REDIS_"):
         return f"redis://{self.host}:{self.port}/{self.database}"
 
 
-class Config(BaseSettings):
+class Config(BaseConfig):
     common: CommonConfig
     webhook: WebhookConfig
     postgres: PostgresConfig
@@ -62,7 +63,7 @@ class Config(BaseSettings):
 
     @property
     def webhook_url(self) -> str:
-        return self.webhook.webhook_url
+        return self.webhook.url
 
     @property
     def database_url(self) -> str:
@@ -72,11 +73,11 @@ class Config(BaseSettings):
     def redis_url(self) -> str:
         return self.redis.url
 
-
-def create_config() -> Config:
-    return Config(
-        common=CommonConfig(),
-        webhook=WebhookConfig(),
-        postgres=PostgresConfig(),
-        redis=RedisConfig(),
-    )
+    @classmethod
+    def create_config(cls) -> Self:
+        return cls(
+            common=CommonConfig(),
+            webhook=WebhookConfig(),
+            postgres=PostgresConfig(),
+            redis=RedisConfig(),
+        )

@@ -2,10 +2,10 @@ from aiogram import Dispatcher
 from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram_dialog import setup_dialogs
 
+from aiogram_template.configs import Config
 from aiogram_template.middlewares.outer import DBSessionMiddleware
 from aiogram_template.runners import on_shutdown, on_startup
 from aiogram_template.services.database import create_engine, create_session_maker
-from aiogram_template.settings import Config
 from aiogram_template.utils import msgspec_json as mjson
 
 

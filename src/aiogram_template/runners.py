@@ -3,7 +3,7 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicati
 from aiohttp import web
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from .settings import Config
+from .configs import Config
 
 
 async def on_startup(bot: Bot, config: Config, dispatcher: Dispatcher) -> None:
@@ -29,5 +29,6 @@ def run_webhook(dp: Dispatcher, config: Config, bot: Bot) -> None:
     SimpleRequestHandler(
         dp, bot, secret_token=config.webhook.secret.get_secret_value()
     ).register(app, path=config.webhook.path)
+
     setup_application(app, dp, bot=bot)
     return web.run_app(app, host=config.webhook.host, port=config.webhook.port)

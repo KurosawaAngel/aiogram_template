@@ -2,7 +2,7 @@ from aiogram import Bot
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-from aiogram_template.settings import Config
+from aiogram_template.configs import Config
 
 
 def create_bot(config: Config) -> Bot:

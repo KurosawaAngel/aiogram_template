@@ -40,7 +40,7 @@ def setup_dispatcher(config: Config) -> Dispatcher:
         url=config.redis_url,
         json_loads=mjson.decode,
         json_dumps=mjson.encode,
-        key_builder=DefaultKeyBuilder(with_destiny=True),
+        key_builder=DefaultKeyBuilder(with_destiny=True, with_bot_id=True),
         state_ttl=timedelta(days=35),
         data_ttl=timedelta(days=35),
     )

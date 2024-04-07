@@ -1,7 +1,7 @@
 import asyncio
 from logging.config import fileConfig
 
-from aiogram_template.configs import Config
+from aiogram_template.config import Config
 from aiogram_template.services.database.models import Base
 from alembic import context
 from sqlalchemy import pool

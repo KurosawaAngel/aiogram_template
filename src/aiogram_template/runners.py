@@ -3,7 +3,7 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicati
 from aiohttp import web
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from .configs import Config
+from .config import Config
 
 
 async def on_startup(bot: Bot, config: Config, dispatcher: Dispatcher) -> None:

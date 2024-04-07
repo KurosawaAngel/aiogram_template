@@ -1,6 +1,6 @@
 import logging
 
-from aiogram_template.configs import Config
+from aiogram_template.config import Config
 from aiogram_template.factories.bot import create_bot
 from aiogram_template.factories.dispatcher import setup_dispatcher
 from aiogram_template.runners import run_webhook

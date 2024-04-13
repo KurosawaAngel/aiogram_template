@@ -19,6 +19,7 @@ aiogram = "^3.4.1"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.8.0"
+ruff = "^0.3.7"
 
 [build-system]
 requires = ["poetry-core"]

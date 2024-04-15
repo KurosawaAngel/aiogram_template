@@ -8,7 +8,7 @@ class BaseRepository:
 
     __slots__ = ("_session",)
 
-    def __init__(self, session: AsyncSession):
+    def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     async def commit(self) -> None:

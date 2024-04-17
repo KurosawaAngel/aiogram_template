@@ -1,3 +1,3 @@
-from .locales import Locale
+from .locale import Locale
 
 __all__ = ["Locale"]

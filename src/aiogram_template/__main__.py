@@ -7,7 +7,7 @@ from aiogram_template.runners import run_webhook
 
 
 def main() -> None:
-    config = Config.create_config()
+    config = Config.create()
     bot = create_bot(config)
     dp = setup_dispatcher(config)
     if config.webhook.use:

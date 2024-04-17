@@ -15,6 +15,7 @@ pydantic-settings = "^2.1.0"
 msgspec = "^0.18.6"
 aiogram-dialog = "^2.1.0"
 aiogram = "^3.4.1"
+dishka = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -24,3 +25,6 @@ ruff = "^0.3.7"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+src = ["src"]

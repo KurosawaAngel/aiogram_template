@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiohttp import web
-from sqlalchemy.ext.asyncio import AsyncEngine
+from dishka import AsyncContainer
 
 from .config import Config
 
@@ -18,10 +18,11 @@ async def on_startup(bot: Bot, config: Config, dispatcher: Dispatcher) -> None:
     await bot.delete_webhook(drop_pending_updates=config.common.drop_pending_updates)
 
 
-async def on_shutdown(bot: Bot, config: Config, engine: AsyncEngine) -> None:
+async def on_shutdown(bot: Bot, config: Config, main_container: AsyncContainer) -> None:
     if config.webhook.reset:
         await bot.delete_webhook()
-    await engine.dispose()
+    await bot.session.close()
+    await main_container.close()
 
 
 def run_webhook(dp: Dispatcher, config: Config, bot: Bot) -> None:

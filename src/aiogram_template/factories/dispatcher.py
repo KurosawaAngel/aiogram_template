@@ -3,12 +3,13 @@ from datetime import timedelta
 from aiogram import Dispatcher
 from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram_dialog import setup_dialogs
+from dishka import AsyncContainer
+from dishka.integrations.aiogram import setup_dishka
 
 from aiogram_template.config import Config
-from aiogram_template.middlewares.outer import DBSessionMiddleware
+from aiogram_template.di.providers import ContextProvider, DatabaseProvider
 from aiogram_template.runners import on_shutdown, on_startup
-from aiogram_template.services.database import create_engine, create_session_maker
-from aiogram_template.utils import msgspec_json as mjson
+from aiogram_template.utils import mjson
 
 
 def _setup_middlewares(dp: Dispatcher, config: Config) -> None:
@@ -20,11 +21,10 @@ def _setup_middlewares(dp: Dispatcher, config: Config) -> None:
 
     :return: None
     """
-
-    dp["engine"] = engine = create_engine(config.database_url)
-    session_maker = create_session_maker(engine)
-    dp.update.outer_middleware(DBSessionMiddleware(session_maker))
-
+    dp["main_container"] = container = AsyncContainer(
+        DatabaseProvider(), ContextProvider(), context={Config: config}
+    )
+    setup_dishka(container, dp)
     setup_dialogs(dp)
 
 

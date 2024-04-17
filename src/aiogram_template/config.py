@@ -73,7 +73,7 @@ class Config(BaseModel):
         return self.redis.url
 
     @classmethod
-    def create_config(cls) -> Self:
+    def create(cls) -> Self:
         return cls(
             common=CommonConfig(),
             webhook=WebhookConfig(),

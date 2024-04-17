@@ -30,7 +30,7 @@ target_metadata = Base.metadata
 
 
 def _create_dsn() -> str:
-    settings = Config.create_config()
+    settings = Config.create()
     return settings.database_url
 
 

@@ -22,7 +22,7 @@ class DatabaseProvider(Provider):
         await engine.dispose()
 
     @provide
-    async def create_session_maker(
+    def create_session_maker(
         engine: AsyncEngine,
     ) -> async_sessionmaker[AsyncSession]:
         return async_sessionmaker(engine)

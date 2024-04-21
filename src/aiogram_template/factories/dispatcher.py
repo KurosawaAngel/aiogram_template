@@ -3,11 +3,15 @@ from datetime import timedelta
 from aiogram import Dispatcher
 from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram_dialog import setup_dialogs
+from aiogram_i18n import I18nMiddleware
+from aiogram_i18n.cores import FluentRuntimeCore
 from dishka import AsyncContainer
 from dishka.integrations.aiogram import setup_dishka
 
 from aiogram_template.config import Config
 from aiogram_template.di.providers import ContextProvider, DatabaseProvider
+from aiogram_template.enums import Locale
+from aiogram_template.middlewares.outer import I18nManager
 from aiogram_template.runners import on_shutdown, on_startup
 from aiogram_template.utils import mjson
 
@@ -26,6 +30,11 @@ def _setup_middlewares(dp: Dispatcher, config: Config) -> None:
     )
     setup_dishka(container, dp)
     setup_dialogs(dp)
+    I18nMiddleware(
+        core=FluentRuntimeCore(path="translations/{locale}", raise_key_error=False),
+        manager=I18nManager(),
+        default_locale=Locale.DEFAULT,
+    ).setup(dp)
 
 
 def setup_dispatcher(config: Config) -> Dispatcher:

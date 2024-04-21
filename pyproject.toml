@@ -2,9 +2,10 @@
 name = "aiogram_template"
 version = "1.0.0"
 description = "basic aiogram template"
-authors = ["KuroAngel"]
+authors = ["KuroAngel <145038102+KuroKoka551@users.noreply.github.com>"]
 readme = "README.md"
 packages = [{include = "aiogram_template", from = "src"}]
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -15,7 +16,9 @@ pydantic-settings = "^2.1.0"
 msgspec = "^0.18.6"
 aiogram-dialog = "^2.1.0"
 aiogram = "^3.4.1"
-dishka = "^1.0.0"
+dishka = "^1.1.0"
+aiogram-i18n = "^1.3.4"
+fluent-runtime = "^0.4.0"
 
 
 [tool.poetry.group.dev.dependencies]

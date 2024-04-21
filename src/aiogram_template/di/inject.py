@@ -20,3 +20,12 @@ def inject_handler(func: Callable) -> Callable:
         is_async=True,
         remove_depends=True,
     )
+
+
+def inject_on_dialog_event(func: Callable) -> Callable:
+    return wrap_injection(
+        func=func,
+        container_getter=lambda p, _: p[1].middleware_data[CONTAINER_NAME],
+        is_async=True,
+        remove_depends=True,
+    )

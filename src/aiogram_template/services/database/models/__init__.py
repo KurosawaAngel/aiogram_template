@@ -1,4 +1,4 @@
-from .base import Base
+from .base import BaseModel
 from .user import DBUser
 
-__all__ = ["Base", "DBUser"]
+__all__ = ["BaseModel", "DBUser"]

@@ -1,9 +1,7 @@
 from aiogram import Bot, Dispatcher
-from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
-from aiohttp import web
 from dishka import AsyncContainer
 
-from .config import Config
+from aiogram_template.config import Config
 
 
 async def on_startup(bot: Bot, config: Config, dispatcher: Dispatcher) -> None:
@@ -23,13 +21,3 @@ async def on_shutdown(bot: Bot, config: Config, main_container: AsyncContainer) 
         await bot.delete_webhook()
     await bot.session.close()
     await main_container.close()
-
-
-def run_webhook(dp: Dispatcher, config: Config, bot: Bot) -> None:
-    app = web.Application()
-    SimpleRequestHandler(
-        dp, bot, secret_token=config.webhook.secret.get_secret_value()
-    ).register(app, path=config.webhook.path)
-
-    setup_application(app, dp, bot=bot)
-    return web.run_app(app, host=config.webhook.host, port=config.webhook.port)

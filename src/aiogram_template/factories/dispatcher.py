@@ -12,8 +12,9 @@ from aiogram_template.config import Config
 from aiogram_template.di.providers import ContextProvider, DatabaseProvider
 from aiogram_template.enums import Locale
 from aiogram_template.middlewares.outer import I18nManager
-from aiogram_template.runners import on_shutdown, on_startup
 from aiogram_template.utils import mjson
+
+from .signal_handlers import on_shutdown, on_startup
 
 
 def _setup_middlewares(dp: Dispatcher, config: Config) -> None:

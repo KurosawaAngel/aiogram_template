@@ -4,7 +4,6 @@ WORKDIR /app
 
 RUN apt-get update &&\
     apt-get upgrade -y && \
-    apt-get install -y git &&\
     rm -rf /var/lib/apt/lists/*
 
 COPY . .

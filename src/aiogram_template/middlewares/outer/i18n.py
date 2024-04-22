@@ -1,3 +1,5 @@
+from typing import cast
+
 from aiogram.types import User
 from aiogram_i18n.managers import BaseManager
 
@@ -12,7 +14,7 @@ class I18nManager(BaseManager):
             return db_user.locale
         if event_from_user and event_from_user.language_code is not None:
             return event_from_user.language_code
-        return self.default_locale
+        return cast(str, self.default_locale)
 
     async def set_locale(self, locale: str, user: DBUser) -> None:
         user.locale = locale

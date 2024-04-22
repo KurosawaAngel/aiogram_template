@@ -5,7 +5,7 @@ from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram_dialog import setup_dialogs
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
-from dishka import AsyncContainer
+from dishka import make_async_container
 from dishka.integrations.aiogram import setup_dishka
 
 from aiogram_template.config import Config
@@ -25,7 +25,7 @@ def _setup_middlewares(dp: Dispatcher, config: Config) -> None:
 
     :return: None
     """
-    dp["main_container"] = container = AsyncContainer(
+    dp["main_container"] = container = make_async_container(
         DatabaseProvider(), ContextProvider(), context={Config: config}
     )
     setup_dishka(container, dp)

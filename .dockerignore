@@ -16,10 +16,6 @@ __pycache__/
 docker-compose*.yml
 Dockerfile
 
-# Poetry
-poetry.lock
-pyproject.toml
-
 # Systemd
 *.system
 systemd/

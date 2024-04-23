@@ -16,13 +16,13 @@ class DatabaseProvider(Provider):
     scope = Scope.APP
 
     @provide
-    async def create_engine(self, config: Config) -> AsyncIterable[AsyncEngine]:
+    async def get_engine(self, config: Config) -> AsyncIterable[AsyncEngine]:
         engine = create_async_engine(config.database_url)
         yield engine
         await engine.dispose()
 
     @provide
-    def create_session_maker(
+    def get_session_maker(
         self,
         engine: AsyncEngine,
     ) -> async_sessionmaker[AsyncSession]:

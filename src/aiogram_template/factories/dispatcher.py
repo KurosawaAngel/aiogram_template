@@ -16,6 +16,8 @@ from aiogram_template.utils import mjson
 
 from .signal_handlers import on_shutdown, on_startup
 
+MAIN_CONTAINER_KEY = "main_container"
+
 
 def _setup_middlewares(dp: Dispatcher, config: Config) -> None:
     """
@@ -26,7 +28,7 @@ def _setup_middlewares(dp: Dispatcher, config: Config) -> None:
 
     :return: None
     """
-    dp["main_container"] = container = make_async_container(
+    dp[MAIN_CONTAINER_KEY] = container = make_async_container(
         DatabaseProvider(), ContextProvider(), context={Config: config}
     )
     setup_dishka(container, dp)

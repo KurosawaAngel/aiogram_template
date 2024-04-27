@@ -6,12 +6,13 @@ services:
     restart: always
     env_file: .env
     command: --port ${REDIS_PORT}
-    ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
     expose:
       - "${REDIS_PORT}"
     volumes:
-      - redis-data:/data
+      - ./redis-data:/data
+    networks:
+      - bot_network:
+
 
   postgres:
     image: postgres:16-alpine
@@ -27,7 +28,10 @@ services:
     expose:
       - "${POSTGRES_PORT}"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - bot_network:
+
 
   bot:
     build: .
@@ -42,6 +46,14 @@ services:
     ports:
       - "${WEBHOOK_PORT}:${WEBHOOK_PORT}"
 
+    networks:
+      - bot_network:
+
+
 volumes:
   redis-data:
   postgres-data:
+
+
+networks:
+  bot_network:

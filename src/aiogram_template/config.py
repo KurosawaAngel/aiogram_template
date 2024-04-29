@@ -3,6 +3,7 @@ from typing import Self
 
 from pydantic import BaseModel, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from sqlalchemy import URL
 
 
 class BaseConfig(BaseSettings):
@@ -40,8 +41,15 @@ class PostgresConfig(BaseConfig, env_prefix="POSTGRES_"):
     user: str = "postgres"
 
     @property
-    def url(self) -> str:
-        return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+    def url(self) -> URL:
+        return URL.create(
+            "postgresql+asyncpg",
+            self.user,
+            self.password,
+            self.host,
+            self.port,
+            self.db,
+        )
 
 
 class RedisConfig(BaseConfig, env_prefix="REDIS_"):
@@ -65,7 +73,7 @@ class Config(BaseModel):
         return self.webhook.url
 
     @property
-    def database_url(self) -> str:
+    def database_url(self) -> URL:
         return self.postgres.url
 
     @property

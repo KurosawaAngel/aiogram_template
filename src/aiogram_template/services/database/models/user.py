@@ -2,7 +2,6 @@ from sqlalchemy import BigInteger, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from aiogram_template.enums import Locale
-
 from .base import BaseModel
 
 

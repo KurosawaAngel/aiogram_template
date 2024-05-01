@@ -1,17 +1,31 @@
+import asyncio
 import logging
 
+from dishka import make_async_container
+
 from aiogram_template.config import Config
-from aiogram_template.factories import create_bot, setup_dispatcher
-from aiogram_template.runner import run_webhook
+from aiogram_template.di.providers import (
+    BotProvider,
+    ContextProvider,
+    DatabaseProvider,
+    DispatcherProvider,
+)
+from aiogram_template.runner import run_polling, run_webhook
 
 
 def main() -> None:
     config = Config.create()
-    bot = create_bot(config)
-    dp = setup_dispatcher(config)
+    main_container = make_async_container(
+        ContextProvider(),
+        DatabaseProvider(),
+        DispatcherProvider(),
+        BotProvider(),
+        context={Config: config},
+    )
     if config.webhook.use:
-        run_webhook(dp, config, bot)
-    dp.run_polling(bot)
+        return run_webhook(config, main_container)
+
+    asyncio.run(run_polling(main_container))
 
 
 if __name__ == "__main__":

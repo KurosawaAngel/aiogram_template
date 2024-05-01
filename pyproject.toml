@@ -32,3 +32,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 src = ["src"]
+
+[tool.ruff.lint.isort]
+no-lines-before = ["local-folder"]

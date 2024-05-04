@@ -16,6 +16,38 @@ from aiogram_template.utils import mjson
 MAIN_CONTAINER_KEY = "main_container"
 
 
+class DispatcherProvider(Provider):
+    scope = Scope.APP
+
+    @provide
+    def setup_dispatcher(self, config: Config) -> Dispatcher:
+        """
+        Setup dispatcher with installed middlewares and included routers
+
+        :param config: Application config
+
+        :return: Configured ``Dispatcher`` with installed middlewares and included routers
+        """
+
+        storage = RedisStorage.from_url(
+            url=config.redis_fsm_url,
+            json_loads=mjson.decode,
+            json_dumps=mjson.encode,
+            key_builder=DefaultKeyBuilder(with_destiny=True, with_bot_id=True),
+            state_ttl=timedelta(days=35),
+            data_ttl=timedelta(days=35),
+        )
+        dp = Dispatcher(
+            storage=storage,
+            events_isolation=storage.create_isolation(),
+            config=config,
+        )
+        _setup_middlewares(dp)
+        dp.startup.register(_on_startup)
+        dp.shutdown.register(_on_shutdown)
+        return dp
+
+
 async def _on_startup(bot: Bot, config: Config, dispatcher: Dispatcher) -> None:
     if config.webhook.use:
         await bot.set_webhook(
@@ -54,35 +86,3 @@ def _setup_middlewares(dp: Dispatcher) -> None:
         manager=I18nManager(),
         default_locale=Locale.DEFAULT,
     ).setup(dp)
-
-
-class DispatcherProvider(Provider):
-    scope = Scope.APP
-
-    @provide
-    def setup_dispatcher(self, config: Config) -> Dispatcher:
-        """
-        Setup dispatcher with installed middlewares and included routers
-
-        :param config: Application config
-
-        :return: Configured ``Dispatcher`` with installed middlewares and included routers
-        """
-
-        storage = RedisStorage.from_url(
-            url=config.redis_url,
-            json_loads=mjson.decode,
-            json_dumps=mjson.encode,
-            key_builder=DefaultKeyBuilder(with_destiny=True, with_bot_id=True),
-            state_ttl=timedelta(days=35),
-            data_ttl=timedelta(days=35),
-        )
-        dp = Dispatcher(
-            storage=storage,
-            events_isolation=storage.create_isolation(),
-            config=config,
-        )
-        _setup_middlewares(dp)
-        dp.startup.register(_on_startup)
-        dp.shutdown.register(_on_shutdown)
-        return dp

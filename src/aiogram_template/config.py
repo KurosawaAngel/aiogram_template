@@ -58,7 +58,7 @@ class RedisConfig(BaseConfig, env_prefix="REDIS_"):
     database: int = 0
 
     @property
-    def url(self) -> str:
+    def fsm_url(self) -> str:
         return f"redis://{self.host}:{self.port}/{self.database}"
 
 
@@ -77,8 +77,8 @@ class Config(BaseModel):
         return self.postgres.url
 
     @property
-    def redis_url(self) -> str:
-        return self.redis.url
+    def redis_fsm_url(self) -> str:
+        return self.redis.fsm_url
 
     @classmethod
     def create(cls) -> Self:

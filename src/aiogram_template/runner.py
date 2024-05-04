@@ -7,6 +7,7 @@ from dishka.integrations import aiogram, aiohttp
 
 from aiogram_template.config import Config
 from aiogram_template.di import MAIN_CONTAINER_KEY
+from aiogram_template.di.inject import inject_runner
 
 
 @aiohttp.inject
@@ -35,9 +36,10 @@ def run_webhook(config: Config, container: AsyncContainer) -> None:
     return web.run_app(app, host=config.webhook.host, port=config.webhook.port)
 
 
-async def run_polling(container: AsyncContainer) -> None:
-    bot = await container.get(Bot)
-    dispatcher = await container.get(Dispatcher)
+@inject_runner
+async def run_polling(
+    container: AsyncContainer, bot: FromDishka[Bot], dispatcher: FromDishka[Dispatcher]
+) -> None:
     dispatcher[MAIN_CONTAINER_KEY] = container
     aiogram.setup_dishka(container, dispatcher)
 

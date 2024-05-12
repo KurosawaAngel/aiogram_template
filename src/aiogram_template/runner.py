@@ -5,7 +5,7 @@ from aiohttp import web
 from dishka import AsyncContainer, FromDishka
 from dishka.integrations import aiogram, aiohttp
 
-from aiogram_template.config import Config
+from aiogram_template.config import WebhookConfig
 from aiogram_template.di import MAIN_CONTAINER_KEY
 from aiogram_template.di.inject import inject_runner
 
@@ -15,25 +15,25 @@ async def _setup_webhook(
     app: web.Application,
     dispatcher: FromDishka[Dispatcher],
     bot: FromDishka[Bot],
-    config: FromDishka[Config],
+    config: FromDishka[WebhookConfig],
 ) -> None:
     container: AsyncContainer = app[aiohttp.DISHKA_CONTAINER_KEY]
     dispatcher[MAIN_CONTAINER_KEY] = container
     aiogram.setup_dishka(container, dispatcher)
 
     SimpleRequestHandler(
-        dispatcher, bot, secret_token=config.webhook.secret.get_secret_value()
-    ).register(app, path=config.webhook.path)
+        dispatcher, bot, secret_token=config.secret.get_secret_value()
+    ).register(app, path=config.path)
 
     setup_application(app, dispatcher)
 
 
-def run_webhook(config: Config, container: AsyncContainer) -> None:
+def run_webhook(config: WebhookConfig, container: AsyncContainer) -> None:
     app = web.Application()
     aiohttp.setup_dishka(container, app)
     app.on_startup.append(_setup_webhook)
 
-    return web.run_app(app, host=config.webhook.host, port=config.webhook.port)
+    return web.run_app(app, host=config.host, port=config.port)
 
 
 @inject_runner

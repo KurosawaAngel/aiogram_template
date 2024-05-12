@@ -1,3 +1,3 @@
-__all__ = ["Repository"]
+__all__ = ["UserRepository"]
 
-from .main import Repository
+from .user import UserRepository

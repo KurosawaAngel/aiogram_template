@@ -1,11 +1,13 @@
 __all__ = [
     "DatabaseProvider",
-    "ContextProvider",
+    "ConfigProvider",
     "BotProvider",
     "DispatcherProvider",
+    "RepositoryProvider",
 ]
 
 from .bot import BotProvider
-from .context import ContextProvider
+from .config import ConfigProvider
 from .database import DatabaseProvider
 from .dispatcher import DispatcherProvider
+from .repository import RepositoryProvider

@@ -8,7 +8,13 @@ from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from dishka import AsyncContainer, Provider, Scope, provide
 
-from aiogram_template.config import Config
+from aiogram_template.config import (
+    BotConfig,
+    CommonConfig,
+    Config,
+    RedisConfig,
+    WebhookConfig,
+)
 from aiogram_template.enums import Locale
 from aiogram_template.middlewares.outer import I18nManager
 from aiogram_template.utils import mjson
@@ -20,17 +26,19 @@ class DispatcherProvider(Provider):
     scope = Scope.APP
 
     @provide
-    def setup_dispatcher(self, config: Config) -> Dispatcher:
+    def setup_dispatcher(
+        self, redis_config: RedisConfig, common_config: CommonConfig
+    ) -> Dispatcher:
         """
         Setup dispatcher with installed middlewares and included routers
 
-        :param config: Application config
+        :param redis_config: Redis config
 
         :return: Configured ``Dispatcher`` with installed middlewares and included routers
         """
 
         storage = RedisStorage.from_url(
-            url=config.redis_fsm_url,
+            url=redis_config.fsm_url,
             json_loads=mjson.decode,
             json_dumps=mjson.encode,
             key_builder=DefaultKeyBuilder(with_destiny=True, with_bot_id=True),
@@ -40,7 +48,7 @@ class DispatcherProvider(Provider):
         dp = Dispatcher(
             storage=storage,
             events_isolation=storage.create_isolation(),
-            config=config,
+            config=common_config,
         )
         _setup_middlewares(dp)
         dp.startup.register(_on_startup)
@@ -48,18 +56,23 @@ class DispatcherProvider(Provider):
         return dp
 
 
-async def _on_startup(bot: Bot, config: Config, dispatcher: Dispatcher) -> None:
-    if config.webhook.use:
+async def _on_startup(
+    bot: Bot, main_container: AsyncContainer, dispatcher: Dispatcher
+) -> None:
+    webhook_config = await main_container.get(WebhookConfig)
+    bot_config = await main_container.get(BotConfig)
+
+    if webhook_config.use:
         await bot.set_webhook(
-            config.webhook_url,
-            drop_pending_updates=config.common.drop_pending_updates,
-            secret_token=config.webhook.secret.get_secret_value(),
+            webhook_config.url,
+            drop_pending_updates=bot_config.drop_pending_updates,
+            secret_token=webhook_config.secret.get_secret_value(),
             allowed_updates=dispatcher.resolve_used_update_types(
                 skip_events={DIALOG_EVENT_NAME}
             ),
         )
         return
-    await bot.delete_webhook(drop_pending_updates=config.common.drop_pending_updates)
+    await bot.delete_webhook(drop_pending_updates=bot_config.drop_pending_updates)
 
 
 async def _on_shutdown(

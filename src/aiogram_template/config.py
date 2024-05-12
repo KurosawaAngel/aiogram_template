@@ -13,9 +13,12 @@ class BaseConfig(BaseSettings):
 
 
 class CommonConfig(BaseConfig, env_prefix="COMMON_"):
-    token: SecretStr = Field(default="")
     admin_chat_id: int = -1
+
+
+class BotConfig(BaseConfig, env_prefix="BOT_"):
     drop_pending_updates: bool = True
+    token: SecretStr = Field(default="")
 
 
 class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
@@ -67,18 +70,7 @@ class Config(BaseModel):
     webhook: WebhookConfig
     postgres: PostgresConfig
     redis: RedisConfig
-
-    @property
-    def webhook_url(self) -> str:
-        return self.webhook.url
-
-    @property
-    def database_url(self) -> URL:
-        return self.postgres.url
-
-    @property
-    def redis_fsm_url(self) -> str:
-        return self.redis.fsm_url
+    bot: BotConfig
 
     @classmethod
     def create(cls) -> Self:
@@ -87,4 +79,5 @@ class Config(BaseModel):
             webhook=WebhookConfig(),
             postgres=PostgresConfig(),
             redis=RedisConfig(),
+            bot=BotConfig(),
         )

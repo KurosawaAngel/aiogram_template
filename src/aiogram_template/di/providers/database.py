@@ -8,16 +8,15 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from aiogram_template.config import Config
-from aiogram_template.services.database import Repository
+from aiogram_template.config import PostgresConfig
 
 
 class DatabaseProvider(Provider):
     scope = Scope.APP
 
     @provide
-    async def get_engine(self, config: Config) -> AsyncIterable[AsyncEngine]:
-        engine = create_async_engine(config.database_url)
+    async def get_engine(self, db_config: PostgresConfig) -> AsyncIterable[AsyncEngine]:
+        engine = create_async_engine(db_config.url)
         yield engine
         await engine.dispose()
 
@@ -29,9 +28,8 @@ class DatabaseProvider(Provider):
         return async_sessionmaker(engine)
 
     @provide(scope=Scope.REQUEST)
-    async def get_repository(
-        self,
-        session_maker: async_sessionmaker[AsyncSession],
-    ) -> AsyncIterable[Repository]:
+    async def get_session(
+        self, session_maker: async_sessionmaker[AsyncSession]
+    ) -> AsyncIterable[AsyncSession]:
         async with session_maker() as session:
-            yield Repository(session)
+            yield session

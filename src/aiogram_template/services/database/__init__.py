@@ -1,4 +1,3 @@
-__all__ = ["DBUser", "Repository"]
+__all__ = ["DBUser"]
 
 from .models import DBUser
-from .repositories import Repository

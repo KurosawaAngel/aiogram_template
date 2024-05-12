@@ -6,9 +6,10 @@ from dishka import make_async_container
 from aiogram_template.config import Config
 from aiogram_template.di.providers import (
     BotProvider,
-    ContextProvider,
+    ConfigProvider,
     DatabaseProvider,
     DispatcherProvider,
+    RepositoryProvider,
 )
 from aiogram_template.runner import run_polling, run_webhook
 
@@ -16,14 +17,15 @@ from aiogram_template.runner import run_polling, run_webhook
 def main() -> None:
     config = Config.create()
     main_container = make_async_container(
-        ContextProvider(),
+        ConfigProvider(),
         DatabaseProvider(),
         DispatcherProvider(),
         BotProvider(),
+        RepositoryProvider(),
         context={Config: config},
     )
     if config.webhook.use:
-        return run_webhook(config, main_container)
+        return run_webhook(config.webhook, main_container)
 
     asyncio.run(run_polling(main_container))
 

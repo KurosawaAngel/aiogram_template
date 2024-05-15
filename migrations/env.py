@@ -32,7 +32,7 @@ target_metadata = BaseModel.metadata
 
 def _create_dsn() -> str:
     settings = Config.create()
-    return settings.database_url
+    return settings.postgres.url.render_as_string(False)
 
 
 config.set_main_option("sqlalchemy.url", _create_dsn())

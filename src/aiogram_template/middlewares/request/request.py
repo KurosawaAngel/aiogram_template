@@ -40,7 +40,6 @@ class RetryRequestMiddleware(BaseRequestMiddleware):
     ) -> Response[TelegramType]:
         backoff: Backoff = Backoff(config=self.backoff_config)
         retries: int = 0
-
         while True:
             retries += 1
             try:
@@ -52,7 +51,7 @@ class RetryRequestMiddleware(BaseRequestMiddleware):
                     type(e).__name__,
                     e,
                 )
-                break
+                raise
             except TelegramRetryAfter as e:
                 if isinstance(method, AnswerCallbackQuery):
                     raise

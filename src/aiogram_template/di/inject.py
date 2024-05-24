@@ -29,12 +29,3 @@ def inject_on_dialog_event(func: Callable) -> Awaitable:
         is_async=True,
         remove_depends=True,
     )
-
-
-def inject_runner(func: Callable) -> Awaitable:
-    return wrap_injection(
-        func=func,
-        container_getter=lambda p, _: p[0],
-        is_async=True,
-        remove_depends=True,
-    )

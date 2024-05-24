@@ -7,6 +7,7 @@ from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from dishka import AsyncContainer, Provider, Scope, provide
+from dishka.integrations.aiogram import setup_dishka
 
 from aiogram_template.config import (
     BotConfig,
@@ -19,15 +20,16 @@ from aiogram_template.enums import Locale
 from aiogram_template.middlewares.outer import I18nManager
 from aiogram_template.utils import mjson
 
-MAIN_CONTAINER_KEY = "main_container"
-
 
 class DispatcherProvider(Provider):
     scope = Scope.APP
 
     @provide
     def setup_dispatcher(
-        self, redis_config: RedisConfig, common_config: CommonConfig
+        self,
+        redis_config: RedisConfig,
+        common_config: CommonConfig,
+        container: AsyncContainer,
     ) -> Dispatcher:
         """
         Setup dispatcher with installed middlewares and included routers
@@ -49,8 +51,9 @@ class DispatcherProvider(Provider):
             storage=storage,
             events_isolation=storage.create_isolation(),
             config=common_config,
+            main_container=container,
         )
-        _setup_middlewares(dp)
+        _setup_middlewares(dp, container)
         dp.startup.register(_on_startup)
         dp.shutdown.register(_on_shutdown)
         return dp
@@ -84,7 +87,7 @@ async def _on_shutdown(
     await main_container.close()
 
 
-def _setup_middlewares(dp: Dispatcher) -> None:
+def _setup_middlewares(dp: Dispatcher, container: AsyncContainer) -> None:
     """
     Setup middlewares for dispatcher
 
@@ -93,6 +96,7 @@ def _setup_middlewares(dp: Dispatcher) -> None:
 
     :return: None
     """
+    setup_dishka(container, dp)
     setup_dialogs(dp)
     I18nMiddleware(
         core=FluentRuntimeCore(path="translations/{locale}", raise_key_error=False),

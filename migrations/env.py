@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from aiogram_template.config import Config
+from aiogram_template.config import PostgresConfig
 from aiogram_template.services.database.models import BaseModel
 
 # this is the Alembic Config object, which provides
@@ -31,8 +31,8 @@ target_metadata = BaseModel.metadata
 
 
 def _create_dsn() -> str:
-    settings = Config.create()
-    return settings.postgres.url.render_as_string(False)
+    settings = PostgresConfig()
+    return settings.url.render_as_string(False)
 
 
 config.set_main_option("sqlalchemy.url", _create_dsn())

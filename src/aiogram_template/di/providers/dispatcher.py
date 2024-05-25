@@ -7,7 +7,7 @@ from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from dishka import AsyncContainer, Provider, Scope, provide
-from dishka.integrations.aiogram import setup_dishka
+from dishka.integrations.aiogram import ContainerMiddleware
 
 from aiogram_template.config import (
     BotConfig,
@@ -96,8 +96,8 @@ def _setup_middlewares(dp: Dispatcher, container: AsyncContainer) -> None:
 
     :return: None
     """
-    setup_dishka(container, dp)
     setup_dialogs(dp)
+    dp.update.middleware(ContainerMiddleware(container))
     I18nMiddleware(
         core=FluentRuntimeCore(path="translations/{locale}", raise_key_error=False),
         manager=I18nManager(),

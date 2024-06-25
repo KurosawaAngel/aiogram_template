@@ -1,7 +1,7 @@
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from aiogram_template.services.database import gateways as repo
+from aiogram_template.data.database import gateways as repo
 
 
 class GatewayProvider(Provider):

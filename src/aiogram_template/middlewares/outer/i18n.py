@@ -3,7 +3,7 @@ from typing import cast
 from aiogram.types import User
 from aiogram_i18n.managers import BaseManager
 
-from aiogram_template.services.database.models import DBUser
+from aiogram_template.data.database.models import DBUser
 
 
 class I18nManager(BaseManager):

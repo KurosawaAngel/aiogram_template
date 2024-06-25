@@ -31,7 +31,7 @@ class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
     use: bool = False
 
     @property
-    def url(self) -> str:
+    def bot_url(self) -> str:
         """URL for Webhook"""
         return f"{self.base}{self.path}"
 

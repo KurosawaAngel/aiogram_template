@@ -10,7 +10,6 @@ from aiogram.client.session.middlewares.base import (
 from aiogram.dispatcher.dispatcher import DEFAULT_BACKOFF_CONFIG
 from aiogram.exceptions import (
     RestartingTelegram,
-    TelegramForbiddenError,
     TelegramNetworkError,
     TelegramRetryAfter,
     TelegramServerError,
@@ -44,14 +43,6 @@ class RetryRequestMiddleware(BaseRequestMiddleware):
             retries += 1
             try:
                 return await make_request(bot, method)
-            except TelegramForbiddenError as e:
-                logger.error(
-                    "Request '%s' failed due to %s - %s - forbidden",
-                    type(method).__name__,
-                    type(e).__name__,
-                    e,
-                )
-                raise
             except TelegramRetryAfter as e:
                 if isinstance(method, AnswerCallbackQuery):
                     raise

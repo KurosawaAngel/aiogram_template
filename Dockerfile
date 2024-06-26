@@ -10,6 +10,4 @@ COPY . .
 
 RUN pip install . --no-cache-dir
 
-RUN chmod +x scripts/docker-entrypoint.sh
-
-ENTRYPOINT ["scripts/docker-entrypoint.sh"]
+CMD [ "python", "-m", "aiogram_template" ]

@@ -7,7 +7,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from aiogram_template.config import PostgresConfig
-from aiogram_template.services.database.models import BaseModel
+from aiogram_template.data.database.models import BaseModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

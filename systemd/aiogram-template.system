@@ -1,7 +1,7 @@
 [Unit]
 Description=aiogram template
 After=syslog.target network.target postgresql.service redis.service
-Requires=postgresql.service
+Requires=postgresql.service redis.service
 
 [Service]
 Type=simple

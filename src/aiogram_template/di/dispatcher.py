@@ -18,7 +18,6 @@ from aiogram_template.config import (
 )
 from aiogram_template.enums import Locale
 from aiogram_template.middlewares.outer import I18nManager
-from aiogram_template.utils import mjson
 
 
 class DispatcherProvider(Provider):
@@ -42,8 +41,6 @@ class DispatcherProvider(Provider):
     ) -> Dispatcher:
         storage = RedisStorage.from_url(
             url=redis_config.fsm_url,
-            json_loads=mjson.decode,
-            json_dumps=mjson.encode,
             key_builder=DefaultKeyBuilder(
                 with_destiny=True, with_bot_id=True, with_business_connection_id=True
             ),
@@ -84,10 +81,7 @@ async def _on_startup(
 
 
 async def _on_shutdown(main_container: AsyncContainer) -> None:
-    webhook_config = await main_container.get(WebhookConfig)
-
-    if not webhook_config.use:
-        await main_container.close()
+    await main_container.close()
 
 
 def _setup_middlewares(

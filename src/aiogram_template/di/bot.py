@@ -8,7 +8,6 @@ from dishka import Provider, Scope, provide
 
 from aiogram_template.config import BotConfig
 from aiogram_template.middlewares.request import RetryRequestMiddleware
-from aiogram_template.utils import mjson
 
 
 class BotProvider(Provider):
@@ -16,7 +15,7 @@ class BotProvider(Provider):
 
     @provide
     async def get_bot(config: BotConfig) -> AsyncIterable[Bot]:
-        session = AiohttpSession(json_loads=mjson.decode, json_dumps=mjson.encode)
+        session = AiohttpSession()
         session.middleware(RetryRequestMiddleware())
         async with Bot(
             token=config.token.get_secret_value(),

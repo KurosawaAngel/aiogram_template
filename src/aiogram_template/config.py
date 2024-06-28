@@ -27,7 +27,6 @@ class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
     path: str = "/webhook"
     port: int = 80
     secret: SecretStr = Field(default_factory=token_urlsafe)
-    reset: bool = True
     use: bool = False
 
     @property

@@ -1,41 +1,68 @@
+import asyncio
+from contextlib import suppress
+
 from aiogram import Bot, Dispatcher
-from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler
 from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
 from aiohttp import web
-from dishka import AsyncContainer
+from dishka import AsyncContainer, FromDishka
 from dishka.integrations import aiohttp
 
 from aiogram_template.config import WebhookConfig
 
 
-def _setup_webhook(
-    app: web.Application,
-    bot: Bot,
-    dispatcher: Dispatcher,
-    config: WebhookConfig,
-) -> None:
-    SimpleRequestHandler(
-        dispatcher, bot, secret_token=config.secret.get_secret_value()
-    ).register(app, path=config.path)
-
-    setup_application(app, dispatcher, bot=bot)
+@aiohttp.inject
+async def handle_bot_update(
+    request: web.Request, handler: FromDishka[SimpleRequestHandler]
+) -> web.Response:
+    return await handler.handle(request)
 
 
-def run_webhook(
-    config: WebhookConfig, container: AsyncContainer, bot: Bot, dispatcher: Dispatcher
-) -> None:
+def run_webhook(config: WebhookConfig, container: AsyncContainer) -> None:
     app = web.Application()
+    app.add_routes([web.post(config.path, handle_bot_update)])
+    app.on_startup.append(_on_startup)
+    app.on_shutdown.append(_on_shutdown)
     aiohttp.setup_dishka(container, app)
-    _setup_webhook(app, bot, dispatcher, config)
 
     return web.run_app(app, host=config.host, port=config.port)
 
 
-def run_polling(bot: Bot, dispatcher: Dispatcher) -> None:
-    dispatcher.run_polling(
+def run_polling(container: AsyncContainer) -> None:
+    with suppress(KeyboardInterrupt):
+        asyncio.run(start_polling(container))
+
+
+async def start_polling(container: AsyncContainer) -> None:
+    dp = await container.get(Dispatcher)
+    bot = await container.get(Bot)
+
+    await dp.start_polling(
         bot,
-        allowed_updates=dispatcher.resolve_used_update_types(
-            skip_events={DIALOG_EVENT_NAME}
-        ),
         polling_timeout=60,
+        allowed_updates=dp.resolve_used_update_types(skip_events={DIALOG_EVENT_NAME}),
     )
+
+
+@aiohttp.inject
+async def _on_startup(app: web.Application, dp: Dispatcher, bot: Bot) -> None:
+    workflow_data = {
+        "app": app,
+        "dispatcher": dp,
+        "bot": bot,
+        **dp.workflow_data,
+    }
+    await dp.emit_startup(**workflow_data)
+
+
+@aiohttp.inject
+async def _on_shutdown(
+    app: web.Application, dp: FromDishka[Dispatcher], bot: FromDishka[Bot]
+) -> None:
+    workflow_data = {
+        "app": app,
+        "dispatcher": dp,
+        "bot": bot,
+        **dp.workflow_data,
+    }
+    await dp.emit_shutdown(**workflow_data)

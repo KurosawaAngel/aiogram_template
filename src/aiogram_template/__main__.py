@@ -11,6 +11,7 @@ from aiogram_template.di import (
     DispatcherProvider,
     FluentProvider,
     GatewayProvider,
+    JinjaProvider,
 )
 from aiogram_template.runner import run_polling, run_webhook
 
@@ -25,6 +26,7 @@ def main() -> None:
         BotProvider(),
         DispatcherProvider(),
         FluentProvider(),
+        JinjaProvider(),
         context={
             Config: config,
         },

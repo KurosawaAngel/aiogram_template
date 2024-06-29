@@ -5,10 +5,12 @@ from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler
 from aiogram_dialog import setup_dialogs
 from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
+from aiogram_dialog.widgets.text.jinja import JINJA_ENV_FIELD
 from aiogram_i18n import I18nMiddleware
-from aiogram_i18n.cores import FluentRuntimeCore
+from aiogram_i18n.cores import Jinja2Core
 from dishka import AsyncContainer, Provider, Scope, provide
-from dishka.integrations.aiogram import setup_dishka
+from dishka.integrations.aiogram import ContainerMiddleware
+from jinja2 import Environment
 
 from aiogram_template.config import (
     BotConfig,
@@ -16,8 +18,8 @@ from aiogram_template.config import (
     RedisConfig,
     WebhookConfig,
 )
-from aiogram_template.enums import Locale
-from aiogram_template.middlewares.outer import I18nManager
+from aiogram_template.middlewares.outer.i18n import I18nManager
+from aiogram_template.middlewares.outer.user import UserMiddleware
 
 
 class DispatcherProvider(Provider):
@@ -32,12 +34,13 @@ class DispatcherProvider(Provider):
         )
 
     @provide
-    def setup_dispatcher(
+    def get_dispatcher(
         self,
         redis_config: RedisConfig,
         config: CommonConfig,
-        fluent_core: FluentRuntimeCore,
         container: AsyncContainer,
+        jinja_core: Jinja2Core,
+        jinja_env: Environment,
     ) -> Dispatcher:
         storage = RedisStorage.from_url(
             url=redis_config.fsm_url,
@@ -53,9 +56,10 @@ class DispatcherProvider(Provider):
             config=config,
             main_container=container,
         )
+        dp[JINJA_ENV_FIELD] = jinja_env
 
         dp.include_routers()
-        _setup_middlewares(dp, fluent_core, container)
+        _setup_middlewares(dp, container, jinja_core)
 
         dp.startup.register(_on_startup)
         dp.shutdown.register(_on_shutdown)
@@ -85,12 +89,12 @@ async def _on_shutdown(main_container: AsyncContainer) -> None:
 
 
 def _setup_middlewares(
-    dp: Dispatcher, core: FluentRuntimeCore, container: AsyncContainer
+    dp: Dispatcher, container: AsyncContainer, jinja_core: Jinja2Core
 ) -> None:
     setup_dialogs(dp)
-    setup_dishka(container, dp)
+    dp.update.outer_middleware(ContainerMiddleware(container))
+    dp.update.outer_middleware(UserMiddleware())
     I18nMiddleware(
-        core=core,
+        core=jinja_core,
         manager=I18nManager(),
-        default_locale=Locale.DEFAULT,
     ).setup(dp)

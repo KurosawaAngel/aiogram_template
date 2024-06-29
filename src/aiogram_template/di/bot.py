@@ -14,7 +14,7 @@ class BotProvider(Provider):
     scope = Scope.APP
 
     @provide
-    async def get_bot(config: BotConfig) -> AsyncIterable[Bot]:
+    async def get_bot(self, config: BotConfig) -> AsyncIterable[Bot]:
         session = AiohttpSession()
         session.middleware(RetryRequestMiddleware())
         async with Bot(

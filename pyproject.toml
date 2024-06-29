@@ -11,18 +11,17 @@ license = "MIT"
 python = "^3.11"
 sqlalchemy = "^2.0.30"
 asyncpg = "^0.29.0"
-alembic = "^1.13.1"
+alembic = "^1.13.2"
 pydantic-settings = "^2.3.4"
 aiogram-dialog = "^2.1.0"
 aiogram = "^3.8.0"
 dishka = "^1.2.0"
-aiogram-i18n = "^1.4"
-fluent = { git = "https://github.com/RootShinobi/python-fluent-breaking-standards", rev = "a71c09b"}
-redis = "^5.0.4"
+aiogram-i18n = { git = "https://github.com/aiogram/i18n", rev = "cd35798"}
+redis = "^5.0.7"
 
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.10.0"
+mypy = "^1.10.1"
 ruff = "^0.4.10"
 
 [build-system]

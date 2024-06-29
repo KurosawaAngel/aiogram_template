@@ -16,5 +16,5 @@ class I18nFormat(Text):
         self.key = key
 
     async def _render_text(self, data: Dict, manager: DialogManager) -> str:
-        i18n = cast(I18nContext, manager.middleware_data.get(I18N_FORMAT_KEY))
+        i18n = cast(I18nContext, manager.middleware_data[I18N_FORMAT_KEY])
         return i18n.get(self.key, **data)

@@ -7,7 +7,7 @@ from aiogram_dialog import setup_dialogs
 from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
 from aiogram_dialog.widgets.text.jinja import JINJA_ENV_FIELD
 from aiogram_i18n import I18nMiddleware
-from aiogram_i18n.cores import Jinja2Core
+from aiogram_i18n.cores import BaseCore
 from dishka import AsyncContainer, Provider, Scope, provide
 from dishka.integrations.aiogram import ContainerMiddleware
 from jinja2 import Environment
@@ -39,7 +39,7 @@ class DispatcherProvider(Provider):
         redis_config: RedisConfig,
         config: CommonConfig,
         container: AsyncContainer,
-        jinja_core: Jinja2Core,
+        i18n_core: BaseCore,
         jinja_env: Environment,
     ) -> Dispatcher:
         storage = RedisStorage.from_url(
@@ -59,7 +59,7 @@ class DispatcherProvider(Provider):
         dp[JINJA_ENV_FIELD] = jinja_env
 
         dp.include_routers()
-        _setup_middlewares(dp, container, jinja_core)
+        _setup_middlewares(dp, container, i18n_core)
 
         dp.startup.register(_on_startup)
         dp.shutdown.register(_on_shutdown)
@@ -89,12 +89,12 @@ async def _on_shutdown(main_container: AsyncContainer) -> None:
 
 
 def _setup_middlewares(
-    dp: Dispatcher, container: AsyncContainer, jinja_core: Jinja2Core
+    dp: Dispatcher, container: AsyncContainer, i18n_core: BaseCore
 ) -> None:
     setup_dialogs(dp)
     dp.update.outer_middleware(ContainerMiddleware(container))
     dp.update.outer_middleware(UserMiddleware())
     I18nMiddleware(
-        core=jinja_core,
+        core=i18n_core,
         manager=I18nManager(),
     ).setup(dp)

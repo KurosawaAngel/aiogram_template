@@ -1,5 +1,5 @@
-from aiogram_i18n.cores import Jinja2Core
-from dishka import Provider, Scope, provide
+from aiogram_i18n.cores import BaseCore, Jinja2Core
+from dishka import AnyOf, Provider, Scope, provide
 from jinja2 import BaseLoader, Environment
 
 from aiogram_template.enums import Locale
@@ -23,7 +23,7 @@ class JinjaProvider(Provider):
         )
 
     @provide
-    def get_jinja_core(self, env: Environment) -> Jinja2Core:
+    def get_jinja_core(self, env: Environment) -> AnyOf[BaseCore, Jinja2Core]:
         return Jinja2Core(
             path="translations/{locale}",
             default_locale=Locale.DEFAULT,

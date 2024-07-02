@@ -16,7 +16,7 @@ class DatabaseProvider(Provider):
 
     @provide
     async def get_engine(self, db_config: PostgresConfig) -> AsyncIterable[AsyncEngine]:
-        engine = create_async_engine(db_config.url)
+        engine = create_async_engine(db_config.db_url)
         yield engine
         await engine.dispose()
 

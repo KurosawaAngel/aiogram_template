@@ -14,6 +14,5 @@ from .config import ConfigProvider
 from .context import ContextProvider
 from .database import DatabaseProvider
 from .dispatcher import DispatcherProvider
-from .fluent import FluentProvider
 from .gateway import GatewayProvider
 from .jinja import JinjaProvider

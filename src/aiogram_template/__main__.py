@@ -9,7 +9,6 @@ from aiogram_template.di import (
     ContextProvider,
     DatabaseProvider,
     DispatcherProvider,
-    FluentProvider,
     GatewayProvider,
     JinjaProvider,
 )
@@ -25,7 +24,6 @@ def main() -> None:
         ContextProvider(),
         BotProvider(),
         DispatcherProvider(),
-        FluentProvider(),
         JinjaProvider(),
         context={
             Config: config,

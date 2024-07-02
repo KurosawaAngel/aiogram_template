@@ -36,12 +36,16 @@ def run_polling(container: AsyncContainer) -> None:
 async def start_polling(container: AsyncContainer) -> None:
     dp = await container.get(Dispatcher)
     bot = await container.get(Bot)
-
-    await dp.start_polling(
-        bot,
-        polling_timeout=60,
-        allowed_updates=dp.resolve_used_update_types(skip_events={DIALOG_EVENT_NAME}),
-    )
+    try:
+        await dp.start_polling(
+            bot,
+            polling_timeout=60,
+            allowed_updates=dp.resolve_used_update_types(
+                skip_events={DIALOG_EVENT_NAME}
+            ),
+        )
+    finally:
+        await container.close()
 
 
 @inject

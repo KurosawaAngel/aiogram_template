@@ -43,7 +43,7 @@ class PostgresConfig(BaseConfig, env_prefix="POSTGRES_"):
     user: str = "postgres"
 
     @property
-    def url(self) -> URL:
+    def db_url(self) -> URL:
         return URL.create(
             "postgresql+asyncpg",
             self.user,
@@ -60,7 +60,7 @@ class RedisConfig(BaseConfig, env_prefix="REDIS_"):
     database: int = 0
 
     @property
-    def fsm_url(self) -> str:
+    def redis_url(self) -> str:
         return f"redis://{self.host}:{self.port}/{self.database}"
 
 

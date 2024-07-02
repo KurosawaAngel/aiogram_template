@@ -43,7 +43,7 @@ class DispatcherProvider(Provider):
         jinja_env: Environment,
     ) -> Dispatcher:
         storage = RedisStorage.from_url(
-            url=redis_config.fsm_url,
+            url=redis_config.redis_url,
             key_builder=DefaultKeyBuilder(
                 with_destiny=True, with_bot_id=True, with_business_connection_id=True
             ),
@@ -62,7 +62,6 @@ class DispatcherProvider(Provider):
         _setup_middlewares(dp, container, i18n_core)
 
         dp.startup.register(_on_startup)
-        dp.shutdown.register(_on_shutdown)
         return dp
 
 
@@ -82,10 +81,6 @@ async def _on_startup(
         )
     else:
         await bot.delete_webhook(drop_pending_updates=bot_config.drop_pending_updates)
-
-
-async def _on_shutdown(main_container: AsyncContainer) -> None:
-    await main_container.close()
 
 
 def _setup_middlewares(

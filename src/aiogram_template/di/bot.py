@@ -21,5 +21,5 @@ class BotProvider(Provider):
             token=config.token.get_secret_value(),
             default=DefaultBotProperties(parse_mode=ParseMode.HTML),
             session=session,
-        ).context() as bot:
+        ) as bot:
             yield bot

@@ -49,7 +49,9 @@ async def start_polling(container: AsyncContainer) -> None:
 
 
 @inject
-async def _on_startup(app: web.Application, dp: Dispatcher, bot: Bot) -> None:
+async def _on_startup(
+    app: web.Application, dp: FromDishka[Dispatcher], bot: FromDishka[Bot]
+) -> None:
     workflow_data = {
         "app": app,
         "dispatcher": dp,

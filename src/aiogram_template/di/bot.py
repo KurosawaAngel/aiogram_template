@@ -7,7 +7,7 @@ from aiogram.enums import ParseMode
 from dishka import Provider, Scope, provide
 
 from aiogram_template.config import BotConfig
-from aiogram_template.middlewares.request import RetryRequestMiddleware
+from aiogram_template.telegram.middlewares.request import RetryRequestMiddleware
 
 
 class BotProvider(Provider):

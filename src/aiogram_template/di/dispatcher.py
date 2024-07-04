@@ -18,8 +18,7 @@ from aiogram_template.config import (
     RedisConfig,
     WebhookConfig,
 )
-from aiogram_template.middlewares.outer.i18n import I18nManager
-from aiogram_template.middlewares.outer.user import UserMiddleware
+from aiogram_template.telegram.middlewares.outer import I18nManager, UserMiddleware
 
 
 class DispatcherProvider(Provider):

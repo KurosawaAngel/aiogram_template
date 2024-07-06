@@ -22,5 +22,6 @@ class UserMiddleware(BaseMiddleware):
         container = cast(AsyncContainer, data[CONTAINER_NAME])
         gateway = await container.get(UserGateway)
         db_user = await gateway.upsert_user(user.id, user.username, user.language_code)
+        await gateway.commit()
         data["db_user"] = db_user
         return await handler(event, data)

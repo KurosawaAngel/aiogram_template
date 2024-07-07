@@ -12,11 +12,12 @@ class UserGateway(BaseGateway):
 
     async def upsert_user(
         self, tg_id: int, username: str | None, locale: str | None
-    ) -> DBUser:
+    ) -> DBUser | None:
         return await self.session.scalar(
             insert(DBUser)
             .values(tg_id=tg_id, username=username, locale=locale)
             .on_conflict_do_update(
                 index_elements=["tg_id"], set_={"username": username}
             )
+            .returning(DBUser)
         )

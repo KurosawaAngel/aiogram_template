@@ -19,7 +19,10 @@ class JinjaProvider(Provider):
         self,
     ) -> Environment:
         return Environment(
-            lstrip_blocks=True, autoescape=True, loader=StubLoader(), trim_blocks=True
+            trim_blocks=True,
+            lstrip_blocks=True,
+            autoescape=True,
+            loader=StubLoader(),
         )
 
     @provide

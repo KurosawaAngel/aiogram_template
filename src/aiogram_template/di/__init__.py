@@ -5,7 +5,6 @@ __all__ = [
     "ContextProvider",
     "BotProvider",
     "DispatcherProvider",
-    "FluentProvider",
     "JinjaProvider",
 ]
 

@@ -8,8 +8,8 @@ from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
 from aiogram_dialog.widgets.text.jinja import JINJA_ENV_FIELD
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import BaseCore
-from dishka import AsyncContainer, Provider, Scope, provide
-from dishka.integrations.aiogram import ContainerMiddleware
+from dishka import AsyncContainer, FromDishka, Provider, Scope, provide
+from dishka.integrations.aiogram import CONTAINER_NAME, ContainerMiddleware, inject
 from jinja2 import Environment
 
 from aiogram_template.config import (
@@ -53,8 +53,8 @@ class DispatcherProvider(Provider):
             storage=storage,
             events_isolation=storage.create_isolation(),
             config=config,
-            main_container=container,
         )
+        dp[CONTAINER_NAME] = container
         dp[JINJA_ENV_FIELD] = jinja_env
 
         dp.include_routers()
@@ -64,11 +64,13 @@ class DispatcherProvider(Provider):
         return dp
 
 
+@inject
 async def _on_startup(
-    bot: Bot, main_container: AsyncContainer, dispatcher: Dispatcher
+    bot: Bot,
+    dispatcher: Dispatcher,
+    webhook_config: FromDishka[WebhookConfig],
+    bot_config: FromDishka[BotConfig],
 ) -> None:
-    webhook_config = await main_container.get(WebhookConfig)
-    bot_config = await main_container.get(BotConfig)
     if webhook_config.use:
         await bot.set_webhook(
             webhook_config.bot_url,

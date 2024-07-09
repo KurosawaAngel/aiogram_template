@@ -22,7 +22,7 @@ class BotConfig(BaseConfig, env_prefix="BOT_"):
 
 
 class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
-    host: str = "localhost"
+    host: str = "127.0.0.1"
     base: str = ""
     path: str = "/webhook"
     port: int = 80

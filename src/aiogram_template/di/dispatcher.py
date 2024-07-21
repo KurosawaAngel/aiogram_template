@@ -28,9 +28,7 @@ class DispatcherProvider(Provider):
     def get_webhook_handler(
         self, dp: Dispatcher, bot: Bot, config: WebhookConfig
     ) -> SimpleRequestHandler:
-        return SimpleRequestHandler(
-            dp, bot, secret_token=config.secret.get_secret_value()
-        )
+        return SimpleRequestHandler(dp, bot, secret_token=config.secret)
 
     @provide
     def get_dispatcher(
@@ -75,7 +73,7 @@ async def _on_startup(
         await bot.set_webhook(
             webhook_config.bot_url,
             drop_pending_updates=bot_config.drop_pending_updates,
-            secret_token=webhook_config.secret.get_secret_value(),
+            secret_token=webhook_config.secret,
             allowed_updates=dispatcher.resolve_used_update_types(
                 skip_events={DIALOG_EVENT_NAME}
             ),

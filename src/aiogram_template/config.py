@@ -3,7 +3,6 @@ from typing import Self
 
 from pydantic import BaseModel, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from sqlalchemy import URL
 
 
 class BaseConfig(BaseSettings):
@@ -26,7 +25,7 @@ class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
     base: str = ""
     path: str = "/webhook"
     port: int = 80
-    secret: SecretStr = Field(default_factory=token_urlsafe)
+    secret: str = Field(default_factory=token_urlsafe)
     use: bool = False
 
     @property
@@ -35,23 +34,8 @@ class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
         return f"{self.base}{self.path}"
 
 
-class PostgresConfig(BaseConfig, env_prefix="POSTGRES_"):
-    host: str = "localhost"
-    db: str = "postgres"
-    password: str = "postgres"
-    port: int = 5432
-    user: str = "postgres"
-
-    @property
-    def db_url(self) -> URL:
-        return URL.create(
-            "postgresql+asyncpg",
-            self.user,
-            self.password,
-            self.host,
-            self.port,
-            self.db,
-        )
+class DatabaseConfig(BaseConfig, env_prefix="DATABASE_"):
+    db_url: SecretStr = "postgresql+asyncpg://postgres:postgres@localhost/postgres"
 
 
 class RedisConfig(BaseConfig, env_prefix="REDIS_"):
@@ -67,7 +51,7 @@ class RedisConfig(BaseConfig, env_prefix="REDIS_"):
 class Config(BaseModel):
     common: CommonConfig
     webhook: WebhookConfig
-    postgres: PostgresConfig
+    postgres: DatabaseConfig
     redis: RedisConfig
     bot: BotConfig
 
@@ -76,7 +60,7 @@ class Config(BaseModel):
         return cls(
             common=CommonConfig(),
             webhook=WebhookConfig(),
-            postgres=PostgresConfig(),
+            postgres=DatabaseConfig(),
             redis=RedisConfig(),
             bot=BotConfig(),
         )

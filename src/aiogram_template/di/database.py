@@ -16,7 +16,7 @@ class DatabaseProvider(Provider):
 
     @provide
     async def get_engine(self, db_config: DatabaseConfig) -> AsyncIterable[AsyncEngine]:
-        engine = create_async_engine(db_config.db_url.get_secret_value())
+        engine = create_async_engine(db_config.url.get_secret_value())
         yield engine
         await engine.dispose()
 

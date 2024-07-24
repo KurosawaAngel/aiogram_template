@@ -16,7 +16,7 @@ class UserMiddleware(BaseMiddleware):
         data: Dict[str, Any],
     ) -> Any:
         user = cast(User | None, data.get("event_from_user"))
-        if not user or user.is_bot:
+        if user is None or user.is_bot:
             return await handler(event, data)
 
         container = cast(AsyncContainer, data[CONTAINER_NAME])

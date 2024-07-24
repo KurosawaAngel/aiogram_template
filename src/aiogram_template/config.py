@@ -35,7 +35,9 @@ class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
 
 
 class DatabaseConfig(BaseConfig, env_prefix="DATABASE_"):
-    url: SecretStr = "postgresql+asyncpg://postgres:postgres@localhost/postgres"
+    url: SecretStr = Field(
+        default="postgresql+asyncpg://postgres:postgres@localhost/postgres"
+    )
 
 
 class RedisConfig(BaseConfig, env_prefix="REDIS_"):

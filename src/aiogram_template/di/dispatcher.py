@@ -18,6 +18,7 @@ from aiogram_template.config import (
     RedisConfig,
     WebhookConfig,
 )
+from aiogram_template.telegram import handlers
 from aiogram_template.telegram.middlewares.outer import I18nManager, UserMiddleware
 
 

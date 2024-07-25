@@ -6,7 +6,6 @@ from aiogram_template.config import Config
 from aiogram_template.di import (
     BotProvider,
     ConfigProvider,
-    ContextProvider,
     DatabaseProvider,
     DispatcherProvider,
     GatewayProvider,
@@ -21,7 +20,6 @@ def main() -> None:
         ConfigProvider(),
         DatabaseProvider(),
         GatewayProvider(),
-        ContextProvider(),
         BotProvider(),
         DispatcherProvider(),
         JinjaProvider(),

@@ -4,7 +4,7 @@ from aiogram_template.config import (
     BotConfig,
     CommonConfig,
     Config,
-    DatabaseConfig,
+    PostgresConfig,
     RedisConfig,
     WebhookConfig,
 )
@@ -16,7 +16,7 @@ class ConfigProvider(Provider):
     config = from_context(provides=Config)
 
     @provide
-    def get_db_config(self, config: Config) -> DatabaseConfig:
+    def get_db_config(self, config: Config) -> PostgresConfig:
         return config.postgres
 
     @provide

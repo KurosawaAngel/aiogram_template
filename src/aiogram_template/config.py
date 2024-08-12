@@ -34,10 +34,16 @@ class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
         return f"{self.base}{self.path}"
 
 
-class DatabaseConfig(BaseConfig, env_prefix="DATABASE_"):
-    url: SecretStr = Field(
-        default="postgresql+asyncpg://postgres:postgres@localhost/postgres"
-    )
+class PostgresConfig(BaseConfig, env_prefix="POSTGRES_"):
+    host: str = "localhost"
+    port: int = 5432
+    user: str = "postgres"
+    password: str = "postgres"
+    database: str = "postgres"
+
+    @property
+    def url(self) -> str:
+        return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
 
 
 class RedisConfig(BaseConfig, env_prefix="REDIS_"):
@@ -53,7 +59,7 @@ class RedisConfig(BaseConfig, env_prefix="REDIS_"):
 class Config(BaseModel):
     common: CommonConfig
     webhook: WebhookConfig
-    postgres: DatabaseConfig
+    postgres: PostgresConfig
     redis: RedisConfig
     bot: BotConfig
 
@@ -62,7 +68,7 @@ class Config(BaseModel):
         return cls(
             common=CommonConfig(),
             webhook=WebhookConfig(),
-            postgres=DatabaseConfig(),
+            postgres=PostgresConfig(),
             redis=RedisConfig(),
             bot=BotConfig(),
         )

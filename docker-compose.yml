@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   redis:
     image: redis:7-alpine
@@ -9,10 +7,9 @@ services:
     expose:
       - "${REDIS_PORT}"
     volumes:
-      - ./redis-data:/data
+      - redis-data:/data
     networks:
-      - bot_network:
-
+      - bot_network
 
   postgres:
     image: postgres:16-alpine
@@ -28,10 +25,9 @@ services:
     expose:
       - "${POSTGRES_PORT}"
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
-      - bot_network:
-
+      - bot_network
 
   bot:
     build: .
@@ -47,8 +43,7 @@ services:
       - "${WEBHOOK_PORT}:${WEBHOOK_PORT}"
 
     networks:
-      - bot_network:
-
+      - bot_network
 
 volumes:
   redis-data:

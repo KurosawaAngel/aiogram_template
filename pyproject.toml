@@ -2,7 +2,7 @@
 name = "aiogram_template"
 version = "1.0.0"
 description = "basic aiogram template"
-authors = ["KuroAngel <145038102+KuroKoka551@users.noreply.github.com>"]
+authors = ["Angel <145038102+KurosawaAngel@users.noreply.github.com>"]
 readme = "README.md"
 packages = [{include = "aiogram_template", from = "src"}]
 license = "MIT"

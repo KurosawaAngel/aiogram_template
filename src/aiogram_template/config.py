@@ -23,7 +23,6 @@ class BotConfig(BaseConfig, env_prefix="BOT_"):
 class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
     host: str = "127.0.0.1"
     base: str = ""
-    path: str = "/webhook"
     port: int = 80
     secret: str = Field(default_factory=token_urlsafe)
     use: bool = False

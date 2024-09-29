@@ -2,24 +2,18 @@ import asyncio
 from contextlib import suppress
 
 from aiogram import Bot, Dispatcher
-from aiogram.webhook.aiohttp_server import SimpleRequestHandler
 from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
 from aiohttp import web
 from dishka import AsyncContainer, FromDishka
 from dishka.integrations.aiohttp import setup_dishka
 
 from aiogram_template.config import WebhookConfig
-
-
-async def handle_bot_update(
-    request: web.Request, handler: FromDishka[SimpleRequestHandler]
-) -> web.Response:
-    return await handler.handle(request)
+from aiogram_template.handlers import bot_router
 
 
 def run_webhook(config: WebhookConfig, container: AsyncContainer) -> None:
     app = web.Application()
-    app.add_routes([web.post(config.path, handle_bot_update)])
+    app.add_routes((bot_router,))
     app.on_startup.append(_on_startup)
     app.on_shutdown.append(_on_shutdown)
     setup_dishka(container, app, auto_inject=True)

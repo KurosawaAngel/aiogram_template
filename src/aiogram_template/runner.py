@@ -7,13 +7,13 @@ from aiohttp import web
 from dishka import AsyncContainer, FromDishka
 from dishka.integrations.aiohttp import setup_dishka
 
+from aiogram_template import handlers
 from aiogram_template.config import WebhookConfig
-from aiogram_template.handlers import bot_router
 
 
 def run_webhook(config: WebhookConfig, container: AsyncContainer) -> None:
     app = web.Application()
-    app.add_routes((bot_router,))
+    app.add_routes((handlers.bot_router,))
     app.on_startup.append(_on_startup)
     app.on_shutdown.append(_on_shutdown)
     setup_dishka(container, app, auto_inject=True)

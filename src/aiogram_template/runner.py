@@ -27,8 +27,8 @@ def run_polling(container: AsyncContainer) -> None:
 
 
 async def start_polling(container: AsyncContainer) -> None:
-    dp = await container.get(Dispatcher)
-    bot = await container.get(Bot)
+    dp: Dispatcher = await container.get(Dispatcher)
+    bot: Bot = await container.get(Bot)
     try:
         await dp.start_polling(
             bot,

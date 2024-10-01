@@ -12,7 +12,7 @@ def main() -> None:
     main_container = make_async_container(
         di.ConfigProvider(),
         di.DatabaseProvider(),
-        di.GatewayProvider(),
+        di.GatewaysProvider(),
         di.BotProvider(),
         di.DispatcherProvider(),
         di.JinjaProvider(),

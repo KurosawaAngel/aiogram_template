@@ -30,7 +30,7 @@ class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
     @property
     def bot_url(self) -> str:
         """URL for Webhook"""
-        return f"{self.base}{self.path}"
+        return f"{self.base}/bot"
 
 
 class PostgresConfig(BaseConfig, env_prefix="POSTGRES_"):

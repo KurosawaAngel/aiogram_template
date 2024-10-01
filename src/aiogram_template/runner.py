@@ -13,10 +13,10 @@ from aiogram_template.config import WebhookConfig
 
 def run_webhook(config: WebhookConfig, container: AsyncContainer) -> None:
     app = web.Application()
-    setup_dishka(container, app, auto_inject=True)
     app.add_routes(handlers.bot_router)
     app.on_startup.append(_on_startup)
     app.on_shutdown.append(_on_shutdown)
+    setup_dishka(container, app, auto_inject=True)
 
     return web.run_app(app, host=config.host, port=config.port)
 

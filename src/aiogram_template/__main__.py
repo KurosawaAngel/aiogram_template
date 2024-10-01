@@ -16,6 +16,7 @@ def main() -> None:
         di.BotProvider(),
         di.DispatcherProvider(),
         di.JinjaProvider(),
+        di.RedisProvider(),
         context={
             Config: config,
         },

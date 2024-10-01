@@ -11,11 +11,11 @@ from aiogram_i18n.cores import BaseCore
 from dishka import AsyncContainer, FromDishka, Provider, Scope, provide
 from dishka.integrations.aiogram import CONTAINER_NAME, ContainerMiddleware, inject
 from jinja2 import Environment
+from redis.asyncio import Redis
 
 from aiogram_template.config import (
     BotConfig,
     CommonConfig,
-    RedisConfig,
     WebhookConfig,
 )
 from aiogram_template.telegram import handlers
@@ -34,14 +34,14 @@ class DispatcherProvider(Provider):
     @provide
     def get_dispatcher(
         self,
-        redis_config: RedisConfig,
+        redis: Redis,
         config: CommonConfig,
         container: AsyncContainer,
         i18n_core: BaseCore,
         jinja_env: Environment,
     ) -> Dispatcher:
-        storage = RedisStorage.from_url(
-            url=redis_config.redis_url,
+        storage = RedisStorage(
+            redis,
             key_builder=DefaultKeyBuilder(
                 with_destiny=True, with_bot_id=True, with_business_connection_id=True
             ),

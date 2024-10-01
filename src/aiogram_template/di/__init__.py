@@ -5,6 +5,7 @@ __all__ = [
     "BotProvider",
     "DispatcherProvider",
     "JinjaProvider",
+    "RedisProvider",
 ]
 
 from .bot import BotProvider
@@ -13,3 +14,4 @@ from .database import DatabaseProvider
 from .dispatcher import DispatcherProvider
 from .gateways import GatewaysProvider
 from .jinja import JinjaProvider
+from .redis import RedisProvider

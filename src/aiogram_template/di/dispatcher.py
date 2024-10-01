@@ -86,7 +86,7 @@ async def _on_startup(
 def _setup_middlewares(
     dp: Dispatcher, container: AsyncContainer, i18n_core: BaseCore
 ) -> None:
-    setup_dialogs(dp)
+    setup_dialogs(dp, events_isolation=dp.fsm.events_isolation)
     dp.update.outer_middleware(ContainerMiddleware(container))
     dp.update.outer_middleware(UserMiddleware())
     I18nMiddleware(

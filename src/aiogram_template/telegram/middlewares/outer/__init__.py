@@ -1,4 +1,3 @@
-__all__ = ["I18nManager", "UserMiddleware"]
+__all__ = ["I18nManager"]
 
 from .i18n import I18nManager
-from .user import UserMiddleware

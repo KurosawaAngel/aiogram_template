@@ -6,10 +6,13 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler
 from aiogram_dialog import setup_dialogs
 from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
 from aiogram_dialog.widgets.text.jinja import JINJA_ENV_FIELD
-from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import BaseCore
 from dishka import AsyncContainer, FromDishka, Provider, Scope, provide
-from dishka.integrations.aiogram import CONTAINER_NAME, ContainerMiddleware, inject
+from dishka.integrations.aiogram import (
+    CONTAINER_NAME,
+    inject,
+    setup_dishka,
+)
 from jinja2 import Environment
 from redis.asyncio import Redis
 
@@ -19,7 +22,7 @@ from aiogram_template.config import (
     WebhookConfig,
 )
 from aiogram_template.telegram import handlers
-from aiogram_template.telegram.middlewares.outer import I18nManager, UserMiddleware
+from aiogram_template.telegram.middlewares.inner.user import UserMiddleware
 
 
 class DispatcherProvider(Provider):
@@ -87,9 +90,6 @@ def _setup_middlewares(
     dp: Dispatcher, container: AsyncContainer, i18n_core: BaseCore
 ) -> None:
     setup_dialogs(dp, events_isolation=dp.fsm.events_isolation)
-    dp.update.outer_middleware(ContainerMiddleware(container))
-    dp.update.outer_middleware(UserMiddleware())
-    I18nMiddleware(
-        core=i18n_core,
-        manager=I18nManager(),
-    ).setup(dp)
+    setup_dishka(container, dp, auto_inject=True)
+    dp.message.middleware(UserMiddleware())
+    dp.callback_query.middleware(UserMiddleware())

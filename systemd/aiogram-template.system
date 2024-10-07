@@ -6,7 +6,7 @@ Requires=postgresql.service redis.service
 [Service]
 Type=simple
 WorkingDirectory=/home/user/dir
-ExecStart=poetry run python3 -m aiogram_template
+ExecStart=uv run aiogram_template
 User=User
 KillMode=process
 Restart=on-failure

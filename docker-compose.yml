@@ -3,31 +3,21 @@ services:
     image: redis:7-alpine
     restart: always
     env_file: .env
-    command: --port ${REDIS_PORT}
-    expose:
-      - "${REDIS_PORT}"
     volumes:
       - redis-data:/data
-    networks:
-      - bot_network
 
   postgres:
     image: postgres:16-alpine
     restart: always
     env_file: .env
     environment:
-      PGPORT: ${POSTGRES_PORT}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-    expose:
-      - "${POSTGRES_PORT}"
+      - "127.0.0.1:${POSTGRES_PORT}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    networks:
-      - bot_network
 
   bot:
     build: .
@@ -42,13 +32,6 @@ services:
     ports:
       - "${WEBHOOK_PORT}:${WEBHOOK_PORT}"
 
-    networks:
-      - bot_network
-
 volumes:
   redis-data:
   postgres-data:
-
-
-networks:
-  bot_network:

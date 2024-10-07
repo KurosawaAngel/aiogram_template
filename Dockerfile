@@ -1,13 +1,15 @@
-FROM python:3.11-slim
-
-WORKDIR /app
+FROM python:3.12-slim
 
 RUN apt-get update &&\
     apt-get upgrade -y && \
     rm -rf /var/lib/apt/lists/*
 
-COPY . .
+COPY --from=ghcr.io/astral-sh/uv:0.4.18 /uv /bin/uv
 
-RUN pip install . --no-cache-dir
+COPY . /app
 
-CMD [ "python", "-m", "aiogram_template" ]
+WORKDIR /app
+RUN uv sync --frozen --no-cache
+
+# Run the application.
+CMD ["uv", "run", "aiogram_template"]

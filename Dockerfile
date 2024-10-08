@@ -12,4 +12,4 @@ WORKDIR /app
 RUN uv sync --frozen --no-cache
 
 # Run the application.
-CMD ["uv", "run", "aiogram_template"]
+CMD ["uv", "run", "-m", "aiogram_template"]

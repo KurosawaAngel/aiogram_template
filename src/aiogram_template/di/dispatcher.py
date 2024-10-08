@@ -59,7 +59,7 @@ class DispatcherProvider(Provider):
         dp[CONTAINER_NAME] = container
         dp[JINJA_ENV_FIELD] = jinja_env
 
-        dp.include_routers()
+        dp.include_routers(handlers.admin_router)
         _setup_middlewares(dp, container, i18n_core)
 
         dp.startup.register(_on_startup)

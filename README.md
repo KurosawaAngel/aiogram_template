@@ -2,6 +2,6 @@
 
 This is a basic template for aiogram
 
-Set up your Database models and create first init migration
+Rename config.dist.toml to config.toml and fill it with your data
 
-Rename .env.dist to .env and fill it with your data
+Set up your Database models and create first init migration

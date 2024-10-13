@@ -7,14 +7,14 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from aiogram_template.config import PostgresConfig
+from aiogram_template.config import DatabaseConfig
 
 
 class DatabaseProvider(Provider):
     scope = Scope.APP
 
     @provide
-    async def get_engine(self, db_config: PostgresConfig) -> AsyncIterable[AsyncEngine]:
+    async def get_engine(self, db_config: DatabaseConfig) -> AsyncIterable[AsyncEngine]:
         engine = create_async_engine(db_config.url)
         yield engine
         await engine.dispose()

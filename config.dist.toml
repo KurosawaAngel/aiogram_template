@@ -1,0 +1,18 @@
+[common]
+admin_chat_id = -1
+
+[telegram]
+token = ''
+drop_pending_updates = true
+
+[webhook]
+host = '0.0.0.0'
+base = ''
+port = 8000
+use = false
+
+[database]
+url = 'postgresql+asyncpg://{user}:{password}@{host}:{port}/{db_name}
+
+[redis]
+url = 'redis://{host}:{port}/{database}'

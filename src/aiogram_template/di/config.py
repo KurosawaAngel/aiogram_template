@@ -1,11 +1,11 @@
 from dishka import Provider, Scope, from_context, provide
 
 from aiogram_template.config import (
-    BotConfig,
     CommonConfig,
     Config,
-    PostgresConfig,
+    DatabaseConfig,
     RedisConfig,
+    TelegramConfig,
     WebhookConfig,
 )
 
@@ -16,12 +16,12 @@ class ConfigProvider(Provider):
     config = from_context(provides=Config)
 
     @provide
-    def get_db_config(self, config: Config) -> PostgresConfig:
-        return config.postgres
+    def get_db_config(self, config: Config) -> DatabaseConfig:
+        return config.database
 
     @provide
-    def get_bot_config(self, config: Config) -> BotConfig:
-        return config.bot
+    def get_bot_config(self, config: Config) -> TelegramConfig:
+        return config.telegram
 
     @provide
     def get_webhook_config(self, config: Config) -> WebhookConfig:

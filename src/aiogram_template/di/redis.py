@@ -11,6 +11,6 @@ class RedisProvider(Provider):
 
     @provide
     async def get_redis(self, config: RedisConfig) -> AsyncIterable[Redis]:
-        redis = Redis.from_url(config.redis_url)
+        redis = Redis.from_url(config.url)
         yield redis
         await redis.close()

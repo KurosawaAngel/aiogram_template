@@ -17,10 +17,12 @@ site/
 .pytest_cache
 .coverage
 
+
 venv/
 .venv/
 .hatch/
 
 .env
+config.toml
 
-poetry.lock
+uv.lock

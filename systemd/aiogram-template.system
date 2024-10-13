@@ -6,7 +6,7 @@ Requires=postgresql.service redis.service
 [Service]
 Type=simple
 WorkingDirectory=/home/user/dir
-ExecStart=uv run aiogram_template
+ExecStart=uv run -m aiogram_template
 User=User
 KillMode=process
 Restart=on-failure

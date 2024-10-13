@@ -17,8 +17,8 @@ from jinja2 import Environment
 from redis.asyncio import Redis
 
 from aiogram_template.config import (
-    BotConfig,
     CommonConfig,
+    TelegramConfig,
     WebhookConfig,
 )
 from aiogram_template.telegram import handlers
@@ -71,19 +71,21 @@ async def _on_startup(
     bot: Bot,
     dispatcher: Dispatcher,
     webhook_config: FromDishka[WebhookConfig],
-    bot_config: FromDishka[BotConfig],
+    telegram_config: FromDishka[TelegramConfig],
 ) -> None:
     if webhook_config.use:
         await bot.set_webhook(
             webhook_config.bot_url,
-            drop_pending_updates=bot_config.drop_pending_updates,
+            drop_pending_updates=telegram_config.drop_pending_updates,
             secret_token=webhook_config.secret,
             allowed_updates=dispatcher.resolve_used_update_types(
                 skip_events={DIALOG_EVENT_NAME}
             ),
         )
     else:
-        await bot.delete_webhook(drop_pending_updates=bot_config.drop_pending_updates)
+        await bot.delete_webhook(
+            drop_pending_updates=telegram_config.drop_pending_updates
+        )
 
 
 def _setup_middlewares(

@@ -1,73 +1,53 @@
+from dataclasses import dataclass, field
 from secrets import token_urlsafe
-from typing import Self
 
-from pydantic import BaseModel, Field, SecretStr
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
-class BaseConfig(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", extra="ignore", frozen=True
-    )
+import tomllib
+from adaptix import Retort
 
 
-class CommonConfig(BaseConfig, env_prefix="COMMON_"):
-    admin_chat_id: int = -1
+@dataclass(slots=True, frozen=True)
+class CommonConfig:
+    admin_chat_id: int
 
 
-class BotConfig(BaseConfig, env_prefix="BOT_"):
-    drop_pending_updates: bool = True
-    token: SecretStr = Field(default="")
+@dataclass(slots=True, frozen=True)
+class TelegramConfig:
+    token: str
+    drop_pending_updates: bool
 
 
-class WebhookConfig(BaseConfig, env_prefix="WEBHOOK_"):
-    host: str = "127.0.0.1"
-    base: str = ""
-    port: int = 80
-    secret: str = Field(default_factory=token_urlsafe)
-    use: bool = False
-
-    @property
-    def bot_url(self) -> str:
-        """URL for Webhook"""
-        return f"{self.base}/bot"
+@dataclass(slots=True, frozen=True)
+class DatabaseConfig:
+    url: str
 
 
-class PostgresConfig(BaseConfig, env_prefix="POSTGRES_"):
-    host: str = "localhost"
-    port: int = 5432
-    user: str = "postgres"
-    password: str = "postgres"
-    db: str = "postgres"
-
-    @property
-    def url(self) -> str:
-        return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+@dataclass(slots=True, frozen=True)
+class RedisConfig:
+    url: str
 
 
-class RedisConfig(BaseConfig, env_prefix="REDIS_"):
-    host: str = "localhost"
-    port: int = 6379
-    database: int = 0
+@dataclass(slots=True, frozen=True)
+class WebhookConfig:
+    host: str
+    base: str
+    port: int
+    use: bool
+    secret: str = field(default_factory=token_urlsafe)
 
-    @property
-    def redis_url(self) -> str:
-        return f"redis://{self.host}:{self.port}/{self.database}"
 
-
-class Config(BaseModel):
+@dataclass(slots=True, frozen=True)
+class Config:
+    redis: RedisConfig
+    database: DatabaseConfig
     common: CommonConfig
     webhook: WebhookConfig
-    postgres: PostgresConfig
-    redis: RedisConfig
-    bot: BotConfig
+    telegram: TelegramConfig
 
-    @classmethod
-    def create(cls) -> Self:
-        return cls(
-            common=CommonConfig(),
-            webhook=WebhookConfig(),
-            postgres=PostgresConfig(),
-            redis=RedisConfig(),
-            bot=BotConfig(),
-        )
+
+def load_config() -> Config:
+    with open("config.toml", "rb") as f:
+        data = tomllib.load(f)
+
+    retort = Retort()
+
+    return retort.load(data, Config)

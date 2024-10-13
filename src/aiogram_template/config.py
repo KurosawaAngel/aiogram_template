@@ -34,6 +34,10 @@ class WebhookConfig:
     use: bool
     secret: str = field(default_factory=token_urlsafe)
 
+    @property
+    def bot_url(self) -> str:
+        return f"{self.base}/bot"
+
 
 @dataclass(slots=True, frozen=True)
 class Config:

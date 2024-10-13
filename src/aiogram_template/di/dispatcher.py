@@ -6,7 +6,6 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler
 from aiogram_dialog import setup_dialogs
 from aiogram_dialog.api.entities import DIALOG_EVENT_NAME
 from aiogram_dialog.widgets.text.jinja import JINJA_ENV_FIELD
-from aiogram_i18n.cores import BaseCore
 from dishka import AsyncContainer, FromDishka, Provider, Scope, provide
 from dishka.integrations.aiogram import (
     CONTAINER_NAME,
@@ -40,7 +39,6 @@ class DispatcherProvider(Provider):
         redis: Redis,
         config: CommonConfig,
         container: AsyncContainer,
-        i18n_core: BaseCore,
         jinja_env: Environment,
     ) -> Dispatcher:
         storage = RedisStorage(
@@ -60,7 +58,7 @@ class DispatcherProvider(Provider):
         dp[JINJA_ENV_FIELD] = jinja_env
 
         dp.include_routers(handlers.admin_router)
-        _setup_middlewares(dp, container, i18n_core)
+        _setup_middlewares(dp, container)
 
         dp.startup.register(_on_startup)
         return dp
@@ -88,9 +86,7 @@ async def _on_startup(
         )
 
 
-def _setup_middlewares(
-    dp: Dispatcher, container: AsyncContainer, i18n_core: BaseCore
-) -> None:
+def _setup_middlewares(dp: Dispatcher, container: AsyncContainer) -> None:
     setup_dialogs(dp, events_isolation=dp.fsm.events_isolation)
     setup_dishka(container, dp, auto_inject=True)
     dp.message.middleware(UserMiddleware())

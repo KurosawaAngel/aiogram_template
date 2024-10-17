@@ -1,6 +1,6 @@
 from typing import AsyncIterable
 
-from dishka import Provider, Scope, provide
+from dishka import AnyOf, Provider, Scope, provide
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from aiogram_template.config import DatabaseConfig
+from aiogram_template.data.database.uow import UoW
 
 
 class DatabaseProvider(Provider):
@@ -20,6 +21,8 @@ class DatabaseProvider(Provider):
         await engine.dispose()
 
     @provide(scope=Scope.REQUEST)
-    async def get_session(self, engine: AsyncEngine) -> AsyncIterable[AsyncSession]:
+    async def get_session(
+        self, engine: AsyncEngine
+    ) -> AsyncIterable[AnyOf[AsyncSession, UoW]]:
         async with AsyncSession(bind=engine, expire_on_commit=False) as session:
             yield session

@@ -6,6 +6,7 @@ from dishka import AsyncContainer
 from dishka.integrations.aiogram import CONTAINER_NAME
 
 from aiogram_template.data.database.gateways import UserGateway
+from aiogram_template.data.database.uow import UoW
 
 
 class UserMiddleware(BaseMiddleware):
@@ -21,7 +22,8 @@ class UserMiddleware(BaseMiddleware):
 
         container = cast(AsyncContainer, data[CONTAINER_NAME])
         gateway: UserGateway = await container.get(UserGateway)
+        uow: UoW = await container.get(UoW)
         db_user = await gateway.upsert_user(user.id, user.username, user.language_code)
-        await gateway.commit()
+        await uow.commit()
         data["db_user"] = db_user
         return await handler(event, data)

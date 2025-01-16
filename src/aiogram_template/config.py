@@ -1,7 +1,7 @@
+import tomllib
 from dataclasses import dataclass, field
 from secrets import token_urlsafe
 
-import tomllib
 from adaptix import Retort
 
 

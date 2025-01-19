@@ -2,8 +2,8 @@
 name = "aiogram-template"
 version = "1.0.0"
 description = "aiogram_template"
-license = "MIT"
-authors = [{author = "Angel", email = "145038102+KurosawaAngel@users.noreply.github.com"}]
+license = { text = "MIT" }
+authors = [{name = "Angel", email = "145038102+KurosawaAngel@users.noreply.github.com"}]
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -29,11 +29,11 @@ include-package-data = true
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.uv]
-dev-dependencies = [
-    "mypy>=1.11.2",
-    "ruff>=0.6.9",
-]
-
 [tool.uv.sources]
 aiogram-i18n = { git = "https://github.com/aiogram/i18n.git", rev = "cd35798806e4770c6470da1bd05468b94c111f89" }
+
+[dependency-groups]
+dev = [
+    "mypy>=1.14.1",
+    "ruff>=0.6.9",
+]

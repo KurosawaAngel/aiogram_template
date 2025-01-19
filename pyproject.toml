@@ -7,16 +7,16 @@ authors = [{author = "Angel", email = "145038102+KurosawaAngel@users.noreply.git
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "adaptix>=3.0.0b8",
-    "aiogram-dialog>=2.2.0",
+    "adaptix>=3.0.0b9",
+    "aiogram-dialog>=2.3",
     "aiogram-i18n",
-    "aiogram>=3.13.1",
-    "alembic>=1.13.3",
-    "asyncpg>=0.29.0",
-    "dishka>=1.3.0",
-    "jinja2>=3.1.4",
-    "redis>=5.1.1",
-    "sqlalchemy>=2.0.35",
+    "aiogram>=3.17",
+    "alembic>=1.14",
+    "dishka>=1.4",
+    "jinja2>=3.1",
+    "redis>=5.2",
+    "sqlalchemy>=2.0",
+    "psycopg[binary,pool]>=3.2",
 ]
 
 [project.scripts]

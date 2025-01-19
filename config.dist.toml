@@ -12,7 +12,7 @@ port = 8000
 use = false
 
 [database]
-url = 'postgresql+asyncpg://{user}:{password}@{host}:{port}/{db_name}
+url = 'postgresql+psycopg://{user}:{password}@{host}:{port}/{db_name}
 
 [redis]
 url = 'redis://{host}:{port}/{database}'

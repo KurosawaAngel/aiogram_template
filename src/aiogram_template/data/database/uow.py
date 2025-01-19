@@ -1,4 +1,4 @@
-from typing import Any, Protocol
+from typing import Protocol
 
 
 class UoW(Protocol):
@@ -6,6 +6,4 @@ class UoW(Protocol):
 
     async def rollback(self) -> None: ...
 
-    async def flush(self) -> None: ...
-
-    def add(self, instance: Any) -> None: ...
+    async def begin(self) -> None: ...

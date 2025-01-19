@@ -1,14 +1,16 @@
+import asyncio
 import logging
+import sys
 
 from dishka import make_async_container
 
 from aiogram_template import di
-from aiogram_template.config import Config
+from aiogram_template.config import Config, load_config
 from aiogram_template.runner import run_polling, run_webhook
 
 
 def main() -> None:
-    config = Config.create()
+    config = load_config()
     main_container = make_async_container(
         di.ConfigProvider(),
         di.DatabaseProvider(),
@@ -34,4 +36,6 @@ if __name__ == "__main__":
         level=logging.INFO,
         datefmt="%d/%m/%Y %H:%M:%S",
     )
+    if sys.platform == "win32":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     main()

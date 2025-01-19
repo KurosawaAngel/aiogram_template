@@ -1,0 +1,6 @@
+target-version = "py311"
+
+src = ["src"]
+
+[lint.isort]
+no-lines-before = ["local-folder"]

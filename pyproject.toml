@@ -1,11 +1,11 @@
 [project]
 name = "aiogram-template"
-version = "0.1.0"
+version = "1.0.0"
 description = "aiogram_template"
 license = "MIT"
 authors = [{author = "Angel", email = "145038102+KurosawaAngel@users.noreply.github.com"}]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
     "adaptix>=3.0.0b9",
     "aiogram-dialog>=2.3",
@@ -19,12 +19,15 @@ dependencies = [
     "psycopg[binary,pool]>=3.2",
 ]
 
-[project.scripts]
-aiogram_template = "aiogram_template.__main__:main"
-
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=66.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.uv]
 dev-dependencies = [
@@ -34,9 +37,3 @@ dev-dependencies = [
 
 [tool.uv.sources]
 aiogram-i18n = { git = "https://github.com/aiogram/i18n.git", rev = "cd35798806e4770c6470da1bd05468b94c111f89" }
-
-[tool.ruff]
-src = ["src"]
-
-[tool.ruff.lint.isort]
-no-lines-before = ["local-folder"]
